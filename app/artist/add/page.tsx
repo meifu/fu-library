@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/system';
 
 import { createArtist, type State } from '@/lib/action';
+import ArtistForm from '@/app/components/artistForm';
 
 const ErrorMsg = styled('p')({
   color: 'red',
@@ -17,14 +18,15 @@ const ErrorMsg = styled('p')({
 
 export default function Page() {
   const initialState: State = { message: '', errors: {} };
-  const [state, dispatch] = useFormState(createArtist, initialState);
+  // const [state, dispatch] = useFormState(createArtist, initialState);
 
-  const { errors, message } = state;
+  // const { errors, message } = state;
   return (
     <div>
       <p>Add artist</p>
-      <form action={dispatch}>
-        <Box width={600}>
+      <ArtistForm onSubmit={createArtist} />
+      {/* <form action={dispatch}>
+        <Box width={500}>
           <Stack spacing={2}>
             <TextField
               label="NAME"
@@ -65,7 +67,7 @@ export default function Page() {
             {!!message && <p>{message}</p>}
           </Stack>
         </Box>
-      </form>
+      </form> */}
     </div>
   );
 }

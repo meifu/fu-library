@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import prismadb from '@/lib/db';
+import { ArtistInterface } from '@/app/components/artistForm';
 
 const CreateFormSchema = z.object({
   id: z.string(),
@@ -36,16 +37,17 @@ export type State = {
 
 const CreateArtistObj = CreateFormSchema.omit({ id: true, createdAt: true, updatedAt: true });
 
-export async function createArtist(prevState: State, formData: FormData) {
+export async function createArtist(formData: ArtistInterface) {
+  console.log('in action createArtist', formData)
   const validatedFields = CreateArtistObj.safeParse({
-    name: formData.get('name'),
-    genre: formData.get('genre'),
-    image: formData.get('image'),
-    tags: formData.get('tags'),
-    description: formData.get('description'),
+    name: formData.name,
+    genre: formData.genre,
+    image: formData.image,
+    tags: formData.tags,
+    description: formData.description,
   });
 
-  console.log('create artist validated errors', validatedFields.error);
+  console.log('create artist validated ', validatedFields);
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,

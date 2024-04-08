@@ -30,7 +30,6 @@ const ErrorMsg = styled('p')({
 });
 
 export default function Page({ params }: { params: ArtistParamsType }) {
-  console.log('tttt', params.id);
   const initialState: State = { message: '', errors: {} };
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
@@ -44,8 +43,6 @@ export default function Page({ params }: { params: ArtistParamsType }) {
     fetch(`/artist/api?id=${params.id}`)
       .then((res) => res.json())
       .then((data: { data: BasicArtistInterface }) => {
-        console.log('test res data', data);
-        console.log('test res data2', data.data);
         const { name, genre, image, description, tags, id } = data.data;
         setData({ name, genre, image, description, tags, id });
         setIsLoading(false);

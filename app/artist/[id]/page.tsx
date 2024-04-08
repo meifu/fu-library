@@ -18,7 +18,7 @@ export default async function Page(
 
   return (
     <>
-      <h3>Artist detail</h3>
+      <h4>Artist Detail</h4>
       {artistData ? (
         <>
           <h3>{artistData.name}</h3>
