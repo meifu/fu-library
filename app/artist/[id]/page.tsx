@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Chip from '@mui/material/Chip';
+import Typography from '@mui/material/Typography';
 
 import { fetchArtist } from '@/lib/artistData';
 
@@ -18,10 +19,12 @@ export default async function Page(
 
   return (
     <>
-      <h4>Artist Detail</h4>
+      <Typography variant="h4" marginBottom={'30px'}>
+        Artist Detail
+      </Typography>
       {artistData ? (
         <>
-          <h3>{artistData.name}</h3>
+          <Typography variant="h3">{artistData.name}</Typography>
           <Box
             sx={{ position: 'relative', overflow: 'hidden' }}
             width={'100%'}

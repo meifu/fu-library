@@ -1,7 +1,6 @@
 'use client';
 
-import { useFormik } from 'formik';
-import { useFormState, useFormStatus } from 'react-dom';
+import { FormikProvider, useField, useFormik } from 'formik';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -9,6 +8,62 @@ import Box from '@mui/material/Box';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { useState } from 'react';
+
+interface InputFieldType {
+  label: string;
+  name: string;
+  multiline?: boolean;
+  minRow?: number;
+}
+
+interface InputFieldProps extends InputFieldType {
+  isLoading: boolean;
+}
+
+function MyTextField(props: InputFieldProps) {
+  const { label, name, minRow, multiline, isLoading } = props;
+  const [field, meta, helpers] = useField(name);
+
+  return (
+    <TextField
+      label={label}
+      name={name}
+      value={field.value}
+      error={meta.touched && Boolean(meta.error)}
+      helperText={meta.touched && meta.error}
+      onChange={field.onChange}
+      onBlur={field.onBlur}
+      disabled={isLoading}
+      multiline={multiline}
+      minRows={minRow}
+    />
+  );
+}
+
+const inputFields: InputFieldType[] = [
+  {
+    label: 'NAME',
+    name: 'name',
+  },
+  {
+    label: 'GENRE',
+    name: 'genre',
+  },
+  {
+    label: 'IMAGE LINK',
+    name: 'image',
+  },
+  {
+    label: 'TAGS',
+    name: 'tags',
+  },
+  {
+    label: 'DESCRIPTION',
+    name: 'description',
+    multiline: true,
+    minRow: 5,
+  },
+];
 
 export interface ArtistInterface {
   id?: string;
@@ -58,66 +113,24 @@ export default function ArtistForm(props: ArtistFormProps) {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <Box width={500}>
-        <Stack spacing={2}>
-          <TextField
-            label="NAME"
-            name="name"
-            value={formik.values.name}
-            error={formik.touched.name && Boolean(formik.errors.name)}
-            helperText={formik.touched.name && formik.errors.name}
-            onChange={formik.handleChange}
-            disabled={isLoading}
-          />
-          <TextField
-            label="GENRE"
-            name="genre"
-            value={formik.values.genre}
-            error={formik.touched.genre && Boolean(formik.errors.genre)}
-            helperText={formik.touched.genre && formik.errors.genre}
-            onChange={formik.handleChange}
-            disabled={isLoading}
-          />
-          <TextField
-            label="IMAGE LINK"
-            name="image"
-            value={formik.values.image}
-            error={formik.touched.image && Boolean(formik.errors.image)}
-            helperText={formik.touched.image && formik.errors.image}
-            onChange={formik.handleChange}
-            disabled={isLoading}
-          />
+    <FormikProvider value={formik}>
+      <form onSubmit={formik.handleSubmit}>
+        <Box>
+          <Stack spacing={2}>
+            {inputFields.map((field) => (
+              <MyTextField key={field.name} isLoading={isLoading} {...field} />
+            ))}
 
-          <TextField
-            label="TAGS"
-            name="tags"
-            value={formik.values.tags}
-            error={formik.touched.tags && Boolean(formik.errors.tags)}
-            helperText={formik.touched?.tags && formik.errors.tags}
-            onChange={formik.handleChange}
-            disabled={isLoading}
-          />
-
-          <TextField
-            label="DESCRIPTION"
-            name="description"
-            value={formik.values.description}
-            error={
-              formik.touched.description && Boolean(formik.errors.description)
-            }
-            helperText={formik.touched.description && formik.errors.description}
-            multiline
-            minRows={5}
-            onChange={formik.handleChange}
-            disabled={isLoading}
-          />
-
-          <Button type="submit" variant="contained" disabled={!formik.isValid}>
-            Add Artist
-          </Button>
-        </Stack>
-      </Box>
-    </form>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={!formik.isValid}
+            >
+              Add Artist
+            </Button>
+          </Stack>
+        </Box>
+      </form>
+    </FormikProvider>
   );
 }

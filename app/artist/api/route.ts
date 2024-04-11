@@ -1,4 +1,6 @@
 import { NextRequest } from 'next/server';
+import { revalidatePath } from 'next/cache';
+
 import prismadb from '@/lib/db';
 
 export async function GET(request: Request) {
@@ -28,6 +30,7 @@ export async function DELETE(request: NextRequest) {
       where: { id: req.id },
     });
     console.log('========', deleteArtist);
+    revalidatePath('/artist');
     return Response.json({ deleteArtist, isSuccess: true });
   } catch (error) {
     console.log({ error });

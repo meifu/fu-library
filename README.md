@@ -4,9 +4,7 @@ Contain an artist list which contains some good artists I know. There are UIs th
 
 #### Plan to...
 
-- Delete artist
-- Combine form, add loading...
+- Combine form, add loading/skeleton...
 - Add Authentication for adding/editing page.
-- Add Navigation.
 - Styling, responsive.
 - Add Songs table and related crud.
