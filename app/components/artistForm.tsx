@@ -14,6 +14,7 @@ interface InputFieldType {
   name: string;
   multiline?: boolean;
   minRow?: number;
+  notDisplay?: boolean;
 }
 
 interface InputFieldProps extends InputFieldType {
@@ -21,7 +22,7 @@ interface InputFieldProps extends InputFieldType {
 }
 
 function MyTextField(props: InputFieldProps) {
-  const { label, name, minRow, multiline, isLoading } = props;
+  const { label, name, minRow, multiline, isLoading, notDisplay } = props;
   const [field, meta, helpers] = useField(name);
 
   return (
@@ -36,6 +37,9 @@ function MyTextField(props: InputFieldProps) {
       disabled={isLoading}
       multiline={multiline}
       minRows={minRow}
+      sx={{
+        visibility: notDisplay ? 'hidden' : 'inherit',
+      }}
     />
   );
 }
@@ -65,6 +69,14 @@ const inputFields: InputFieldType[] = [
   },
 ];
 
+const editSpecificField: InputFieldType[] = [
+  {
+    label: 'ID',
+    name: 'id',
+    notDisplay: true,
+  },
+];
+
 export interface ArtistInterface {
   id?: string;
   name: string;
@@ -76,6 +88,8 @@ export interface ArtistInterface {
 
 interface ArtistFormProps {
   onSubmit: (formData: ArtistInterface) => any;
+  data?: ArtistInterface;
+  isEdit?: boolean;
 }
 
 const defaultValues: ArtistInterface = {
@@ -95,15 +109,19 @@ const validationSchema = z.object({
   tags: z.optional(z.string()),
 });
 
-export default function ArtistForm(props: ArtistFormProps) {
+export default function ArtistForm({
+  onSubmit,
+  data = defaultValues,
+  isEdit,
+}: ArtistFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const formik = useFormik({
-    initialValues: defaultValues,
+    initialValues: data,
     validationSchema: toFormikValidationSchema(validationSchema),
     onSubmit: (values) => {
       console.log('onSubmit', values);
-      props.onSubmit(values);
+      onSubmit(values);
       setIsLoading(true);
     },
     validateOnChange: true,
@@ -112,19 +130,23 @@ export default function ArtistForm(props: ArtistFormProps) {
     },
   });
 
+  const displayFields = isEdit
+    ? inputFields.concat(editSpecificField)
+    : inputFields;
+
   return (
     <FormikProvider value={formik}>
       <form onSubmit={formik.handleSubmit}>
         <Box>
           <Stack spacing={2}>
-            {inputFields.map((field) => (
+            {displayFields.map((field) => (
               <MyTextField key={field.name} isLoading={isLoading} {...field} />
             ))}
 
             <Button
               type="submit"
               variant="contained"
-              disabled={!formik.isValid}
+              disabled={!formik.isValid || isLoading}
             >
               Add Artist
             </Button>

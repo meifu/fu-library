@@ -14,18 +14,22 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 import { useEffect, useState } from 'react';
-import { ArtistInterface } from '../components/artistForm';
+import { ArtistInterface } from '../components/ArtistForm';
+import ArtistListSkeleton from '../components/ArtistListSkeleton';
 
 export default function Page() {
   const [artists, setArtists] = useState<ArtistInterface[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isDeleteOk, setIsDeleteOk] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch('/artists')
       .then((res) => res.json())
       .then((data) => {
         setArtists(data.data);
+        setIsLoading(false);
       });
   }, []);
 
@@ -40,54 +44,61 @@ export default function Page() {
   };
 
   const refreshPage = () => {
+    setIsLoading(true);
     fetch('/artists')
       .then((res) => res.json())
       .then((data) => {
         setArtists(data.data);
+        setIsLoading(false);
       });
   };
 
   return (
     <Box width={600} sx={{ margin: '30px auto 0' }}>
       <Typography variant="h4" marginBottom="15px">
-        Artists that I love listen to
+        Artists that I payed attention:
       </Typography>
-      <Paper elevation={3}>
-        <List>
-          {artists.map((ar) => {
-            return (
-              <ListItem key={ar.id}>
-                <ListItemText>
-                  <ListItemButton href={`/artist/${ar.id}`}>
-                    {ar.name}
-                  </ListItemButton>
-                </ListItemText>
-                <Button
-                  size="small"
-                  onClick={async () => {
-                    const res = await fetch('/artist/api', {
-                      method: 'DELETE',
-                      body: JSON.stringify({
-                        id: ar.id,
-                      }),
-                    });
-                    const data = await res.json();
-                    setIsOpen(true);
-                    if (data.isSuccess) {
-                      setIsDeleteOk(true);
-                      refreshPage();
-                    } else {
-                      setIsDeleteOk(false);
-                    }
-                  }}
-                >
-                  <DeleteIcon fontSize="small" />
-                </Button>
-              </ListItem>
-            );
-          })}
-        </List>
-      </Paper>
+
+      {isLoading ? (
+        <ArtistListSkeleton />
+      ) : (
+        <Paper elevation={3}>
+          <List>
+            {artists.map((ar) => {
+              return (
+                <ListItem key={ar.id}>
+                  <ListItemText>
+                    <ListItemButton href={`/artist/${ar.id}`}>
+                      {ar.name}
+                    </ListItemButton>
+                  </ListItemText>
+                  <Button
+                    size="small"
+                    onClick={async () => {
+                      const res = await fetch('/artist/api', {
+                        method: 'DELETE',
+                        body: JSON.stringify({
+                          id: ar.id,
+                        }),
+                      });
+                      const data = await res.json();
+                      setIsOpen(true);
+                      if (data.isSuccess) {
+                        setIsDeleteOk(true);
+                        refreshPage();
+                      } else {
+                        setIsDeleteOk(false);
+                      }
+                    }}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </Button>
+                </ListItem>
+              );
+            })}
+          </List>
+        </Paper>
+      )}
       <Fab
         color="primary"
         aria-label="add"

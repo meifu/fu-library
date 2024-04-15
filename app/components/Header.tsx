@@ -2,6 +2,7 @@
 
 import NextLink from 'next/link';
 import { useRef, useState } from 'react';
+
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
@@ -43,47 +44,51 @@ export default function Header() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <LibraryMusicIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-        <Typography>Library</Typography>
+        <Button href="/" sx={{ color: 'white' }} disableRipple>
+          <LibraryMusicIcon
+            sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
+          />
+          <Typography>Library</Typography>
+        </Button>
 
         {/* <Box
-          sx={{
-            flexGrow: 1,
-            display: {
-              xs: 'flex',
-              md: 'none',
-            },
-          }}
-        >
-          <IconButton
-            ref={anchorEl as any}
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            // onClick={handleOpenNavMenu}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl.current}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
+            sx={{
+              flexGrow: 1,
+              display: {
+                xs: 'flex',
+                md: 'none',
+              },
             }}
-            keepMounted
-            open
-            sx={{ display: { xs: 'block', md: 'none' } }}
           >
-            {pages.map((p, i) => (
-              <MenuItem key={p.label}>
-                <NextLink href={p.href}>
-                  <Typography textAlign="center">{p.label}</Typography>
-                </NextLink>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box> */}
+            <IconButton
+              ref={anchorEl as any}
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              // onClick={handleOpenNavMenu}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl.current}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              keepMounted
+              open
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            >
+              {pages.map((p, i) => (
+                <MenuItem key={p.label}>
+                  <NextLink href={p.href}>
+                    <Typography textAlign="center">{p.label}</Typography>
+                  </NextLink>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box> */}
 
         <LibraryMusicIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
         <Typography

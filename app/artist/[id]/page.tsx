@@ -18,17 +18,21 @@ export default async function Page(
   const artistData = await fetchArtist(params.id);
 
   return (
-    <>
-      <Typography variant="h4" marginBottom={'30px'}>
-        Artist Detail
-      </Typography>
+    <Box width="100%">
       {artistData ? (
-        <>
-          <Typography variant="h3">{artistData.name}</Typography>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <Typography
+            variant="h3"
+            marginTop="15px"
+            marginBottom="30px"
+            fontWeight="bold"
+          >
+            {artistData.name}
+          </Typography>
           <Box
             sx={{ position: 'relative', overflow: 'hidden' }}
-            width={'100%'}
-            height={'600px'}
+            width="100%"
+            height="500px"
           >
             <Image
               src={artistData.image}
@@ -37,23 +41,25 @@ export default async function Page(
               style={{ objectFit: 'contain' }}
             />
           </Box>
-          <p>Genre: {artistData.genre}</p>
-          <p>Description: {artistData.description}</p>
-          {!!artistData.tags && <Chip label={artistData.tags} />}
+          <Box width={600}>
+            <p>Genre: {artistData.genre}</p>
+            <p>Description: {artistData.description}</p>
+            {!!artistData.tags && <Chip label={artistData.tags} />}
 
-          <Box width="100%" marginTop="60px">
-            <Link
-              href={`/artist/${artistData.id}/edit`}
-              variant="button"
-              component={NextLink}
-            >
-              Update Artist Data
-            </Link>
+            <Box width="100%" marginTop="60px">
+              <Link
+                href={`/artist/${artistData.id}/edit`}
+                variant="button"
+                component={NextLink}
+              >
+                Update Artist Data
+              </Link>
+            </Box>
           </Box>
-        </>
+        </Box>
       ) : (
         <p>No data</p>
       )}
-    </>
+    </Box>
   );
 }

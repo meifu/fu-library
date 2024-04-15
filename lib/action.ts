@@ -5,7 +5,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import prismadb from '@/lib/db';
-import { ArtistInterface } from '@/app/components/artistForm';
+import { ArtistInterface } from '@/app/components/ArtistForm';
+import { signIn } from '@/app/auth';
 
 const CreateFormSchema = z.object({
   id: z.string(),
@@ -38,13 +39,19 @@ export type State = {
 const CreateArtistObj = CreateFormSchema.omit({ id: true, createdAt: true, updatedAt: true });
 
 export async function createArtist(formData: ArtistInterface) {
-  console.log('in action createArtist', formData)
+  const {
+    name,
+    genre,
+    image,
+    tags,
+    description,
+  } = formData;
   const validatedFields = CreateArtistObj.safeParse({
-    name: formData.name,
-    genre: formData.genre,
-    image: formData.image,
-    tags: formData.tags,
-    description: formData.description,
+    name,
+    genre,
+    image,
+    tags,
+    description,
   });
 
   console.log('create artist validated ', validatedFields);
@@ -80,15 +87,16 @@ export async function createArtist(formData: ArtistInterface) {
 
 const putArtistObj = CreateFormSchema.omit({ createdAt: true, updatedAt: true });
 
-export async function putArtist(prevState: State, formData: FormData) {
+export async function putArtist(formData: ArtistInterface) {
   console.log('putArtist', formData)
+  // const { id, name, genre, image, tags, description } = formData;
   const validatedFields = putArtistObj.safeParse({
-    id: formData.get('id'),
-    name: formData.get('name'),
-    genre: formData.get('genre'),
-    image: formData.get('image'),
-    tags: formData.get('tags'),
-    description: formData.get('description'),
+    id: formData.id,
+    name: formData.name,
+    genre: formData.genre,
+    image: formData.image,
+    tags: formData.tags,
+    description: formData.description,
   });
 
   if (!validatedFields.success) {
@@ -130,6 +138,20 @@ export async function putArtist(prevState: State, formData: FormData) {
     prismadb.$disconnect();
   }
 
-  revalidatePath(`/artist/${formData.get('id')}`);
-  redirect(`/artist/${formData.get('id')}`);
+  revalidatePath(`/artist/${formData.id}`);
+  redirect(`/artist/${formData.id}`);
+}
+
+export interface LoginField {
+  email: string;
+  password: string;
+}
+
+export async function authenticate(formData: LoginField) {
+  try {
+    
+  } catch (error) {
+    console.log('test', error);
+    throw error;
+  }
 }
