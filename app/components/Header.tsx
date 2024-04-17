@@ -2,6 +2,7 @@
 
 import NextLink from 'next/link';
 import { useRef, useState } from 'react';
+import { signOut, useSession } from 'next-auth/react';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,7 +17,8 @@ import Button from '@mui/material/Button';
 
 interface PageType {
   label: string;
-  href: string;
+  href?: string;
+  onClick?: () => void;
 }
 
 const pages: PageType[] = [
@@ -26,11 +28,32 @@ const pages: PageType[] = [
   },
   {
     label: 'Songs',
-    href: '/',
+    href: '/songs',
   },
 ];
 
-export default function Header() {
+const signInPage: PageType[] = [
+  {
+    label: 'Log in',
+    href: '/login',
+  },
+];
+
+const signOutPage: PageType[] = [
+  {
+    label: 'Log out',
+    onClick: () => {
+      signOut();
+    },
+  },
+];
+
+interface HeaderProps {
+  // session: any;
+}
+
+export default function Header({}: HeaderProps) {
+  const { data, update } = useSession();
   // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const anchorEl = useRef<null | HTMLElement>(null);
 
@@ -40,6 +63,12 @@ export default function Header() {
   //     setAnchorEl(event.target as any);
   //   }
   // };
+
+  console.log('test useSession data', data);
+  const displayedPages = data
+    ? pages.concat(signOutPage)
+    : pages.concat(signInPage);
+  // const displayedPages = pages;
 
   return (
     <AppBar position="static">
@@ -52,43 +81,43 @@ export default function Header() {
         </Button>
 
         {/* <Box
-            sx={{
-              flexGrow: 1,
-              display: {
-                xs: 'flex',
-                md: 'none',
-              },
-            }}
-          >
-            <IconButton
-              ref={anchorEl as any}
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              // onClick={handleOpenNavMenu}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl.current}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+              sx={{
+                flexGrow: 1,
+                display: {
+                  xs: 'flex',
+                  md: 'none',
+                },
               }}
-              keepMounted
-              open
-              sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              {pages.map((p, i) => (
-                <MenuItem key={p.label}>
-                  <NextLink href={p.href}>
-                    <Typography textAlign="center">{p.label}</Typography>
-                  </NextLink>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box> */}
+              <IconButton
+                ref={anchorEl as any}
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                // onClick={handleOpenNavMenu}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl.current}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                open
+                sx={{ display: { xs: 'block', md: 'none' } }}
+              >
+                {pages.map((p, i) => (
+                  <MenuItem key={p.label}>
+                    <NextLink href={p.href}>
+                      <Typography textAlign="center">{p.label}</Typography>
+                    </NextLink>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box> */}
 
         <LibraryMusicIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
         <Typography
@@ -112,8 +141,13 @@ export default function Header() {
             display: { xs: 'none', md: 'flex' },
           }}
         >
-          {pages.map((p, i) => (
-            <Button key={p.label} sx={{ color: 'white' }} href={p.href}>
+          {displayedPages.map((p, i) => (
+            <Button
+              key={p.label}
+              sx={{ color: 'white' }}
+              href={p.href}
+              onClick={p.onClick}
+            >
               {p.label}
             </Button>
           ))}

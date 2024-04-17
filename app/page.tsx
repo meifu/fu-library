@@ -15,8 +15,6 @@ export default function Page() {
         <li>Eslint, Prettier</li>
         <li>Material UI</li>
         <li>Formik</li>
-      </ul>
-      <ul>
         <li>Loading, Skeleton</li>
         <li>Next Auth</li>
         <li>jest, react-testing-library</li>

@@ -5,8 +5,8 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import prismadb from '@/lib/db';
-import { ArtistInterface } from '@/app/components/ArtistForm';
-import { signIn } from '@/app/auth';
+import { ArtistInterface, LoginField } from '@/lib/definitions';
+import handler from '@/app/api/auth/[...nextauth]/route';
 
 const CreateFormSchema = z.object({
   id: z.string(),
@@ -88,8 +88,7 @@ export async function createArtist(formData: ArtistInterface) {
 const putArtistObj = CreateFormSchema.omit({ createdAt: true, updatedAt: true });
 
 export async function putArtist(formData: ArtistInterface) {
-  console.log('putArtist', formData)
-  // const { id, name, genre, image, tags, description } = formData;
+  console.log('putArtist', formData);
   const validatedFields = putArtistObj.safeParse({
     id: formData.id,
     name: formData.name,
@@ -142,16 +141,11 @@ export async function putArtist(formData: ArtistInterface) {
   redirect(`/artist/${formData.id}`);
 }
 
-export interface LoginField {
-  email: string;
-  password: string;
-}
-
-export async function authenticate(formData: LoginField) {
-  try {
-    
-  } catch (error) {
-    console.log('test', error);
-    throw error;
-  }
-}
+// export async function authenticate(formData: LoginField) {
+//   try {
+//     await handler.signIn('credentials', formData)
+//   } catch (error) {
+//     console.log('test', error);
+//     throw error;
+//   }
+// }

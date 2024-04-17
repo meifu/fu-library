@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -13,8 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
-import { useEffect, useState } from 'react';
-import { ArtistInterface } from '../components/ArtistForm';
+import { ArtistInterface } from '@/lib/definitions';
 import ArtistListSkeleton from '../components/ArtistListSkeleton';
 
 export default function Page() {

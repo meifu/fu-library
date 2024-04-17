@@ -4,12 +4,15 @@ import { FormikProvider, useField, useFormik } from 'formik';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { signIn } from 'next-auth/react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
-import { LoginField } from '@/lib/action';
+import { LoginField } from '@/lib/definitions';
 
 interface LoginFieldInterface {
   name: string;
@@ -44,27 +47,57 @@ const defaultValue: LoginField = {
 };
 
 export default function LoginForm() {
+  const router = useRouter();
+  const [isCredentialFailed, setIsCredentialFailed] = useState(false);
   const formik = useFormik({
     initialValues: defaultValue,
     validationSchema: toFormikValidationSchema(validationSchema),
     onSubmit: async (values) => {
-      console.log('onSubmit', values);
-      const res = await signIn('google');
-      console.log('test', res);
+      const res = await signIn('credentials', {
+        ...values,
+        redirect: false,
+      });
+      if (!res?.ok) {
+        setIsCredentialFailed(true);
+      } else {
+        router.push('/');
+      }
     },
   });
 
   return (
     <FormikProvider value={formik}>
-      <form onSubmit={formik.handleSubmit}>
-        <Stack spacing={2} direction="column">
-          <LoginField label="Email" name="email" />
-          <LoginField label="Password" name="password" type="password" />
-          <Button variant="contained" type="submit">
-            Log in
-          </Button>
-        </Stack>
-      </form>
+      <Stack spacing={2} direction="column">
+        <form onSubmit={formik.handleSubmit}>
+          <Stack spacing={2} direction="column" mt={1}>
+            <LoginField label="Email" name="email" />
+            <LoginField label="Password" name="password" type="password" />
+            {isCredentialFailed && (
+              <Typography mt={1} mb={1} color="error">
+                Invalid sign in
+              </Typography>
+            )}
+            <Button variant="contained" type="submit">
+              Log in
+            </Button>
+          </Stack>
+        </form>
+        <Typography variant="h6" textAlign="center">
+          OR
+        </Typography>
+        <Button
+          variant="outlined"
+          onClick={async () => {
+            try {
+              await signIn('google', { callbackUrl: '/' });
+            } catch (error) {
+              console.error('what error', error);
+            }
+          }}
+        >
+          Log in with google account
+        </Button>
+      </Stack>
     </FormikProvider>
   );
 }

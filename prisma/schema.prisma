@@ -35,3 +35,10 @@ model Song {
   artistId  String   @db.ObjectId
   artist    Artist   @relation(fields: [artistId], references: [id])
 }
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String @unique
+  password String
+}

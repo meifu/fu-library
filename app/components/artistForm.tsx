@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { FormikProvider, useField, useFormik } from 'formik';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -7,7 +8,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { useState } from 'react';
+
+import { ArtistInterface } from '@/lib/definitions';
 
 interface InputFieldType {
   label: string;
@@ -76,15 +78,6 @@ const editSpecificField: InputFieldType[] = [
     notDisplay: true,
   },
 ];
-
-export interface ArtistInterface {
-  id?: string;
-  name: string;
-  genre: string;
-  image: string;
-  tags?: string;
-  description: string;
-}
 
 interface ArtistFormProps {
   onSubmit: (formData: ArtistInterface) => any;
