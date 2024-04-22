@@ -6,21 +6,24 @@ import Link from '@mui/material/Link';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 
-import { fetchArtist } from '@/lib/artistData';
+import { fetchArtist } from '@/lib/action';
+import BasicContainer from '@/app/components/BasicContainer';
 
-interface ArtistParamsType {
-  id: string;
+interface ArtistPageProps {
+  params: {
+    id: string;
+  };
 }
 
 export default async function Page(
-  { params }: { params: ArtistParamsType } = { params: { id: '' } }
+  { params }: ArtistPageProps = { params: { id: '' } }
 ) {
   const artistData = await fetchArtist(params.id);
 
   return (
-    <Box width="100%">
+    <Box width="100%" display="flex" flexDirection="column" alignItems="center">
       {artistData ? (
-        <Box display="flex" flexDirection="column" alignItems="center">
+        <>
           <Typography
             variant="h3"
             marginTop="15px"
@@ -41,7 +44,7 @@ export default async function Page(
               style={{ objectFit: 'contain' }}
             />
           </Box>
-          <Box width={600}>
+          <BasicContainer>
             <p>Genre: {artistData.genre}</p>
             <p>Description: {artistData.description}</p>
             {!!artistData.tags && <Chip label={artistData.tags} />}
@@ -55,8 +58,8 @@ export default async function Page(
                 Update Artist Data
               </Link>
             </Box>
-          </Box>
-        </Box>
+          </BasicContainer>
+        </>
       ) : (
         <p>No data</p>
       )}

@@ -29,7 +29,6 @@ export async function DELETE(request: NextRequest) {
     const deleteArtist = await prismadb.artist.delete({
       where: { id: req.id },
     });
-    console.log('========', deleteArtist);
     revalidatePath('/artist');
     return Response.json({ deleteArtist, isSuccess: true });
   } catch (error) {

@@ -1,7 +1,7 @@
 'use client';
 
 import NextLink from 'next/link';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 
 import AppBar from '@mui/material/AppBar';
@@ -27,8 +27,8 @@ const pages: PageType[] = [
     href: '/artist',
   },
   {
-    label: 'Songs',
-    href: '/songs',
+    label: 'Song',
+    href: '/song',
   },
 ];
 
@@ -54,9 +54,15 @@ interface HeaderProps {
 
 export default function Header({}: HeaderProps) {
   const { data, update } = useSession();
-  // const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const anchorEl = useRef<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   // const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
   //   if (event.target) {
   //     console.log(event.target);
@@ -68,73 +74,61 @@ export default function Header({}: HeaderProps) {
   const displayedPages = data
     ? pages.concat(signOutPage)
     : pages.concat(signInPage);
-  // const displayedPages = pages;
 
   return (
     <AppBar position="static">
       <Toolbar>
         <Button href="/" sx={{ color: 'white' }} disableRipple>
-          <LibraryMusicIcon
-            sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
-          />
+          <LibraryMusicIcon sx={{ mr: 1 }} />
           <Typography>Library</Typography>
         </Button>
 
-        {/* <Box
-              sx={{
-                flexGrow: 1,
-                display: {
-                  xs: 'flex',
-                  md: 'none',
-                },
-              }}
-            >
-              <IconButton
-                ref={anchorEl as any}
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                // onClick={handleOpenNavMenu}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl.current}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                open
-                sx={{ display: { xs: 'block', md: 'none' } }}
-              >
-                {pages.map((p, i) => (
-                  <MenuItem key={p.label}>
-                    <NextLink href={p.href}>
-                      <Typography textAlign="center">{p.label}</Typography>
-                    </NextLink>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box> */}
-
-        <LibraryMusicIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-        <Typography
-          variant="h5"
-          noWrap
-          component="a"
-          href=""
+        <Box
           sx={{
-            mr: 2,
-            display: { xs: 'flex', md: 'none' },
-            flexGrow: 1,
-            textDecoration: 'none',
-            letterSpacing: '.3rem',
+            marginLeft: 'auto',
+            display: {
+              xs: 'flex',
+              md: 'none',
+            },
           }}
         >
-          Library
-        </Typography>
+          <IconButton
+            ref={anchorEl as any}
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={handleClick}
+            aria-controls={open ? 'library-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            keepMounted
+            open={open}
+            sx={{ display: { xs: 'block', md: 'none' } }}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'library-button',
+            }}
+          >
+            {pages.map((p, i) => (
+              <MenuItem key={p.label}>
+                <NextLink href={p.href || ''}>
+                  <Typography textAlign="center">{p.label}</Typography>
+                </NextLink>
+              </MenuItem>
+            ))}
+          </Menu>
+        </Box>
+
         <Box
           sx={{
             marginLeft: 'auto',

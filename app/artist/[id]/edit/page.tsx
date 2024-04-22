@@ -7,14 +7,18 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { putArtist } from '@/lib/action';
 import { useEffect, useState } from 'react';
-import ArtistForm, { ArtistInterface } from '@/app/components/ArtistForm';
+import ArtistForm from '@/app/components/ArtistForm';
 import EditSkeleton from '@/app/components/EditSkeleton';
+import { ArtistInterface } from '@/lib/definitions';
+import BasicContainer from '@/app/components/BasicContainer';
 
-interface ArtistParamsType {
-  id: string;
+interface ArtistEditProps {
+  params: {
+    id: string;
+  };
 }
 
-export default function Page({ params }: { params: ArtistParamsType }) {
+export default function Page({ params }: ArtistEditProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<ArtistInterface | undefined>(undefined);
 
@@ -30,7 +34,7 @@ export default function Page({ params }: { params: ArtistParamsType }) {
   }, [params.id]);
 
   return (
-    <Box width={600} sx={{ margin: '0 auto' }}>
+    <BasicContainer>
       <Box
         display="flex"
         justifyContent="space-between"
@@ -47,6 +51,6 @@ export default function Page({ params }: { params: ArtistParamsType }) {
       ) : (
         <ArtistForm onSubmit={putArtist} data={data} isEdit={true} />
       )}
-    </Box>
+    </BasicContainer>
   );
 }

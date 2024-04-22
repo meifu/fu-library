@@ -20,6 +20,7 @@ export default function Page() {
         <li>jest, react-testing-library</li>
         <li>Cypress</li>
         <li>Github Action</li>
+        <li>CI/CD</li>
       </ul>
     </main>
   );

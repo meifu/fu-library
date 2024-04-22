@@ -113,14 +113,10 @@ export default function ArtistForm({
     initialValues: data,
     validationSchema: toFormikValidationSchema(validationSchema),
     onSubmit: (values) => {
-      console.log('onSubmit', values);
       onSubmit(values);
       setIsLoading(true);
     },
     validateOnChange: true,
-    validate: (values) => {
-      console.log('validate', values);
-    },
   });
 
   const displayFields = isEdit
@@ -135,7 +131,6 @@ export default function ArtistForm({
             {displayFields.map((field) => (
               <MyTextField key={field.name} isLoading={isLoading} {...field} />
             ))}
-
             <Button
               type="submit"
               variant="contained"

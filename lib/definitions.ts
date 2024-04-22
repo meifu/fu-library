@@ -15,6 +15,27 @@ export interface ArtistInterface {
   name: string;
   genre: string;
   image: string;
-  tags?: string;
+  tags?: string | null;
   description: string;
+}
+
+export interface SongInterface {
+  id?: string;
+  name: string;
+  comments?: string[];
+  link: string;
+  lyrics?: string | null;
+  description: string;
+  artists?: string;
+  artistId?: string;
+}
+
+export interface SongInterfaceDb {
+  id: string;
+  name: string;
+  comments: string[];
+  link: string;
+  lyrics?: string | null;
+  description: string;
+  artists?: ArtistInterface[];
 }

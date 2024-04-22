@@ -22,18 +22,21 @@ model Artist {
   description String
   createdAt   DateTime? @default(now())
   updatedAt   DateTime?
-  songs       Song[]
+  songIDs     String[]  @db.ObjectId
+  songs       Song[]    @relation(fields: [songIDs], references: [id])
 }
 
 model Song {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  comment   String
-  link      String
-  lyrics    String
-  timestamp DateTime
-  artistId  String   @db.ObjectId
-  artist    Artist   @relation(fields: [artistId], references: [id])
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  comments    String[]
+  link        String
+  lyrics      String?
+  description String
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime?
+  artistId    String[]  @db.ObjectId
+  artists     Artist[]  @relation(fields: [artistId], references: [id])
 }
 
 model User {

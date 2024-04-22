@@ -17,6 +17,7 @@ import Paper from '@mui/material/Paper';
 
 import { ArtistInterface } from '@/lib/definitions';
 import ArtistListSkeleton from '../components/ArtistListSkeleton';
+import BasicContainer from '../components/BasicContainer';
 
 export default function Page() {
   const [artists, setArtists] = useState<ArtistInterface[]>([]);
@@ -55,7 +56,7 @@ export default function Page() {
   };
 
   return (
-    <Box width={600} sx={{ margin: '30px auto 0' }}>
+    <BasicContainer>
       <Typography variant="h4" marginBottom="15px">
         Artists that I payed attention:
       </Typography>
@@ -63,42 +64,44 @@ export default function Page() {
       {isLoading ? (
         <ArtistListSkeleton />
       ) : (
-        <Paper elevation={3}>
-          <List>
-            {artists.map((ar) => {
-              return (
-                <ListItem key={ar.id}>
-                  <ListItemText>
-                    <ListItemButton href={`/artist/${ar.id}`}>
-                      {ar.name}
-                    </ListItemButton>
-                  </ListItemText>
-                  <Button
-                    size="small"
-                    onClick={async () => {
-                      const res = await fetch('/artist/api', {
-                        method: 'DELETE',
-                        body: JSON.stringify({
-                          id: ar.id,
-                        }),
-                      });
-                      const data = await res.json();
-                      setIsOpen(true);
-                      if (data.isSuccess) {
-                        setIsDeleteOk(true);
-                        refreshPage();
-                      } else {
-                        setIsDeleteOk(false);
-                      }
-                    }}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </Button>
-                </ListItem>
-              );
-            })}
-          </List>
-        </Paper>
+        // <Paper elevation={3}>
+        <List>
+          {artists.map((ar) => {
+            return (
+              <ListItem key={ar.id} disablePadding>
+                <ListItemText
+                  sx={{ borderLeft: 'solid', marginBottom: '10px' }}
+                >
+                  <ListItemButton href={`/artist/${ar.id}`}>
+                    {ar.name}
+                  </ListItemButton>
+                </ListItemText>
+                <Button
+                  size="small"
+                  onClick={async () => {
+                    const res = await fetch('/artist/api', {
+                      method: 'DELETE',
+                      body: JSON.stringify({
+                        id: ar.id,
+                      }),
+                    });
+                    const data = await res.json();
+                    setIsOpen(true);
+                    if (data.isSuccess) {
+                      setIsDeleteOk(true);
+                      refreshPage();
+                    } else {
+                      setIsDeleteOk(false);
+                    }
+                  }}
+                >
+                  <DeleteIcon fontSize="small" />
+                </Button>
+              </ListItem>
+            );
+          })}
+        </List>
+        // </Paper>
       )}
       <Fab
         color="primary"
@@ -125,6 +128,6 @@ export default function Page() {
           Delete artist {isDeleteOk ? 'success' : 'failed'}!
         </Alert>
       </Snackbar>
-    </Box>
+    </BasicContainer>
   );
 }

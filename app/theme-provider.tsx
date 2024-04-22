@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { blueGrey } from '@mui/material/colors';
 
 const theme = createTheme({

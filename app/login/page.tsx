@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import LoginForm from '../components/LoginForm';
+import BasicContainer from '../components/BasicContainer';
 
 export const metadata: Metadata = {
   title: 'Login',
@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <Box width={600} padding={3} margin="0 auto">
+    <BasicContainer>
       <Typography variant="h3" gutterBottom>
         Log In
       </Typography>
       <LoginForm />
-    </Box>
+    </BasicContainer>
   );
 }

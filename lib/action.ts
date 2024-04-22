@@ -5,10 +5,9 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import prismadb from '@/lib/db';
-import { ArtistInterface, LoginField } from '@/lib/definitions';
-import handler from '@/app/api/auth/[...nextauth]/route';
+import { ArtistInterface, SongInterface } from '@/lib/definitions';
 
-const CreateFormSchema = z.object({
+const CreateArtistFormSchema = z.object({
   id: z.string(),
   name: z.string({
     required_error: 'Please enter the name of the artist.',
@@ -21,11 +20,9 @@ const CreateFormSchema = z.object({
   description: z.string({
     required_error: 'Please enter the description.',
   }),
-  createdAt: z.optional(z.string()),
-  updatedAt: z.optional(z.string()),
 });
 
-export type State = {
+export type ArtistState = {
   errors?: {
     name?: string[];
     genre?: string[];
@@ -36,7 +33,7 @@ export type State = {
   message?: string | null;
 }
 
-const CreateArtistObj = CreateFormSchema.omit({ id: true, createdAt: true, updatedAt: true });
+const CreateArtistObj = CreateArtistFormSchema.omit({ id: true });
 
 export async function createArtist(formData: ArtistInterface) {
   const {
@@ -54,7 +51,6 @@ export async function createArtist(formData: ArtistInterface) {
     description,
   });
 
-  console.log('create artist validated ', validatedFields);
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -85,11 +81,8 @@ export async function createArtist(formData: ArtistInterface) {
   
 }
 
-const putArtistObj = CreateFormSchema.omit({ createdAt: true, updatedAt: true });
-
 export async function putArtist(formData: ArtistInterface) {
-  console.log('putArtist', formData);
-  const validatedFields = putArtistObj.safeParse({
+  const validatedFields = CreateArtistFormSchema.safeParse({
     id: formData.id,
     name: formData.name,
     genre: formData.genre,
@@ -141,11 +134,186 @@ export async function putArtist(formData: ArtistInterface) {
   redirect(`/artist/${formData.id}`);
 }
 
-// export async function authenticate(formData: LoginField) {
-//   try {
-//     await handler.signIn('credentials', formData)
-//   } catch (error) {
-//     console.log('test', error);
-//     throw error;
-//   }
-// }
+export async function fetchArtists() {
+  try {
+    const data = await prismadb.artist.findMany({});
+    return data;
+  } catch (error) {
+    console.log('fetch artist error', error);
+  } finally {
+    prismadb.$disconnect();
+  }
+}
+
+export async function fetchArtist(artistId: string) {
+  try {
+    const data = await prismadb.artist.findUnique({
+      where: {
+        id: artistId,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.log('==fetch artist==', error);
+    throw new Error(`Failed to fetch artist ${artistId}`);
+  } finally {
+    await prismadb.$disconnect();
+  }
+}
+
+const createSongSchema = z.object({
+  id: z.string(),
+  name: z.string({
+    required_error: 'Please enter the name of the artist.',
+  }),
+  link: z.string().url(),
+  lyrics: z.optional(z.string()),
+  description: z.string(),
+  artists: z.string(),
+});
+
+export type SongState = {
+  errors?: {
+    name?: string[];
+    link?: string[];
+    lyrics?: string[];
+    description?: string[];
+    artists?: string[];
+  };
+  message?: string | null;
+}
+
+const createSongSchemaObj = createSongSchema.omit({ id: true });
+
+export async function createSong(formData: SongInterface) { 
+  const { name, link, lyrics, description, artists, artistId } = formData;
+  const validatedFields = createSongSchemaObj.safeParse({
+    name, link, lyrics, description, artists
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Song',
+    };
+  }
+
+  const theArtist: ArtistInterface | null = await fetchArtist(validatedFields.data.artists);
+  if (!theArtist) {
+    throw new Error('Database error: No artist found.');
+  }
+
+  try {
+    await prismadb.song.create({
+      data: {
+        ...validatedFields.data,
+        // artistId: [validatedFields.data.artists],
+        artists: {
+          connect: [{ id: validatedFields.data.artists }],
+        },
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      include: {
+        artists: true,
+      }
+    });
+
+  } catch (error) {
+    console.log({ error });
+    return {
+      message: 'Database Error: Failed to Create Song.',
+    };
+  } finally {
+    prismadb.$disconnect();
+  }
+
+  revalidatePath('/song');
+  redirect('/song');
+}
+
+export async function fetchSongs() {
+  try {
+    const data = await prismadb.song.findMany({});
+    return data;
+  } catch (error) {
+    console.log('Database error: Failed to fetch songs', error);
+  } finally {
+    prismadb.$disconnect();
+  }
+}
+
+export async function fetchSong(songId: string): Promise<SongInterface> {
+  try {
+    const data = await prismadb.song.findUnique({
+      where: {
+        id: songId,
+      },
+    });
+
+    if (!data) {
+      throw new Error(`Database error: failed to fetch song ${songId}`);
+    }
+
+    let artistObj: ArtistInterface | null = null;
+    if (data?.artistId[0]) {
+      artistObj = await fetchArtist(data?.artistId[0]);
+    }
+
+    return {
+      ...data,
+      name: data.name || '',
+      link: data.link || '',
+      artistId: artistObj?.id || '',
+      artists: artistObj?.name || '',
+    };
+  } catch (error) {
+    console.log('failed to fetch a song', error);
+    throw new Error('Database error: failed to fetch song');
+  } finally {
+    prismadb.$disconnect();
+  }
+}
+
+export async function putSong(formData: SongInterface) {
+  const validatedFields = createSongSchema.safeParse({
+    id: formData.id,
+    name: formData.name,
+    link: formData.link,
+    lyric: formData.lyrics,
+    description: formData.description,
+    artists: formData.artists,
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Put Song',
+    };
+  }
+
+  try {
+    // find artist id
+    
+    return {
+      isSuccess: true,
+    }
+  } catch (error) {
+    throw new Error(`Database error: failed to put song ${formData.name}`)
+  } finally {
+    prismadb.$disconnect();
+  }
+}
+
+export async function deleteSong(songId: string) {
+  try {
+    const deleteSong = await prismadb.song.delete({ where: { id: songId }});
+    console.log('========', deleteSong);
+    return { isSuccess: true };
+  } catch (error) {
+    console.log(`Database Error: Failed to delete song ${songId}`);
+    return ({ isSuccess: false });
+  } finally {
+    prismadb.$disconnect();
+  }
+}
