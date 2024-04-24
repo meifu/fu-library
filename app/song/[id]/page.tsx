@@ -9,18 +9,21 @@ import { fetchSong } from '@/lib/action';
 import { defaultSongValues } from '@/app/components/SongForm';
 import BasicContainer from '@/app/components/BasicContainer';
 import Title from '@/app/components/Title';
+import { SongInterface } from '@/lib/definitions';
 
 interface SongPageProps {
-  params: {
+  params?: {
     id: string;
   };
 }
 
-export default async function Page(
-  { params }: SongPageProps = { params: { id: '' } }
-) {
-  const songData = (await fetchSong(params.id)) || defaultSongValues;
-  const { name, link, lyrics, description, artists, id } = songData;
+export default async function Page({ params }: SongPageProps) {
+  let songData;
+  if (params?.id) {
+    songData = await fetchSong(params.id);
+  }
+  const { name, link, lyrics, description, artists, id } =
+    songData || defaultSongValues;
 
   return (
     <Suspense fallback={<span>loading...</span>}>

@@ -29,7 +29,7 @@ interface TextInputFieldProps extends InputFieldType {
 }
 
 function MyTextField(props: TextInputFieldProps) {
-  const { label, name, minRow, multiline, isLoading, notDisplay, data } = props;
+  const { label, name, minRow, multiline, isLoading, notDisplay } = props;
   const [field, meta, helpers] = useField(name);
 
   return (

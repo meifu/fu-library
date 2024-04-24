@@ -10,15 +10,16 @@ import BasicContainer from '@/app/components/BasicContainer';
 import Title from '@/app/components/Title';
 
 interface ArtistPageProps {
-  params: {
+  params?: {
     id: string;
   };
 }
 
-export default async function Page(
-  { params }: ArtistPageProps = { params: { id: '' } }
-) {
-  const artistData = await fetchArtist(params.id);
+export default async function Page({ params }: ArtistPageProps) {
+  let artistData;
+  if (params?.id) {
+    artistData = await fetchArtist(params?.id);
+  }
 
   return (
     <Box width="100%" display="flex" flexDirection="column" alignItems="center">

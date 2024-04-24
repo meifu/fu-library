@@ -18,6 +18,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
@@ -30,6 +31,7 @@
     ]
   },
   "include": [
+    "app",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
