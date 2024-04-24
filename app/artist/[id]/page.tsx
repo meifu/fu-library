@@ -4,10 +4,10 @@ import Image from 'next/image';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Chip from '@mui/material/Chip';
-import Typography from '@mui/material/Typography';
 
 import { fetchArtist } from '@/lib/action';
 import BasicContainer from '@/app/components/BasicContainer';
+import Title from '@/app/components/Title';
 
 interface ArtistPageProps {
   params: {
@@ -24,14 +24,7 @@ export default async function Page(
     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
       {artistData ? (
         <>
-          <Typography
-            variant="h3"
-            marginTop="15px"
-            marginBottom="30px"
-            fontWeight="bold"
-          >
-            {artistData.name}
-          </Typography>
+          <Title text={artistData.name} />
           <Box
             sx={{ position: 'relative', overflow: 'hidden' }}
             width="100%"

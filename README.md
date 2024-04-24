@@ -9,4 +9,5 @@ Contain artist/song lists that contain some cool stuff. There are UIs that users
 - Add editor for lyrics.
 - Styling, responsive.
 - pagination
+- search and debounce
 - CI/CD

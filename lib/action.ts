@@ -134,6 +134,18 @@ export async function putArtist(formData: ArtistInterface) {
   redirect(`/artist/${formData.id}`);
 }
 
+export async function deleteArtist(artistId: string) {
+  try {
+    const deleteArtist = await prismadb.artist.delete({ where: { id: artistId }});
+    return { isSuccess: true, data: deleteArtist };
+  } catch (error) {
+    console.log(`Database Error: Failed to delete song ${artistId}`);
+    return ({ isSuccess: false, data: error });
+  } finally {
+    prismadb.$disconnect();
+  }
+}
+
 export async function fetchArtists() {
   try {
     const data = await prismadb.artist.findMany({});
@@ -308,11 +320,10 @@ export async function putSong(formData: SongInterface) {
 export async function deleteSong(songId: string) {
   try {
     const deleteSong = await prismadb.song.delete({ where: { id: songId }});
-    console.log('========', deleteSong);
-    return { isSuccess: true };
+    return { isSuccess: true, data: deleteSong };
   } catch (error) {
     console.log(`Database Error: Failed to delete song ${songId}`);
-    return ({ isSuccess: false });
+    return ({ isSuccess: false, data: error });
   } finally {
     prismadb.$disconnect();
   }

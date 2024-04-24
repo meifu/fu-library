@@ -201,7 +201,7 @@ export default function SongForm({
               variant="contained"
               disabled={!formik.isValid || isLoading}
             >
-              Add Song
+              {isEdit ? 'Update' : 'Add'} Song
             </Button>
           </Stack>
         </Box>

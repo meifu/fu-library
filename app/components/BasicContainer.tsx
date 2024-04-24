@@ -13,6 +13,7 @@ export default function BasicContainer({ children }: Props) {
   const matchSmall = useMediaQuery('(max-width:600px)', { noSsr: true });
   return (
     <Box
+      position="relative"
       width={matchSmall ? '100%' : '600px'}
       sx={{ margin: '0 auto' }}
       padding={2}

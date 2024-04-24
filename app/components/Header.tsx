@@ -2,7 +2,7 @@
 
 import NextLink from 'next/link';
 import { useState } from 'react';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -34,7 +34,7 @@ const pages: PageType[] = [
 
 const signInPage: PageType[] = [
   {
-    label: 'Log in',
+    label: 'Log In',
     href: '/login',
   },
 ];
@@ -49,11 +49,13 @@ const signOutPage: PageType[] = [
 ];
 
 interface HeaderProps {
-  // session: any;
+  data?: {
+    name: string;
+    email: string;
+  };
 }
 
-export default function Header({}: HeaderProps) {
-  const { data, update } = useSession();
+export default function Header({ data }: HeaderProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -63,14 +65,7 @@ export default function Header({}: HeaderProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  // const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-  //   if (event.target) {
-  //     console.log(event.target);
-  //     setAnchorEl(event.target as any);
-  //   }
-  // };
 
-  console.log('test useSession data', data);
   const displayedPages = data
     ? pages.concat(signOutPage)
     : pages.concat(signInPage);

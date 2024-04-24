@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: Title render Title correctly 1`] = `
+<div
+  className="MuiStack-root css-1ty7g7t-MuiStack-root"
+>
+  <span
+    className="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-wave css-1hirv1y-MuiSkeleton-root"
+    style={
+      {
+        "height": 60,
+        "width": "100%",
+      }
+    }
+  />
+  <span
+    className="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-wave css-1hirv1y-MuiSkeleton-root"
+    style={
+      {
+        "height": 60,
+        "width": "80%",
+      }
+    }
+  />
+  <span
+    className="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-wave css-1hirv1y-MuiSkeleton-root"
+    style={
+      {
+        "height": 60,
+        "width": "100%",
+      }
+    }
+  />
+  <span
+    className="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-wave css-1hirv1y-MuiSkeleton-root"
+    style={
+      {
+        "height": 60,
+        "width": "90%",
+      }
+    }
+  />
+  <span
+    className="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-wave css-1hirv1y-MuiSkeleton-root"
+    style={
+      {
+        "height": 60,
+        "width": "100%",
+      }
+    }
+  />
+  <span
+    className="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-wave css-1hirv1y-MuiSkeleton-root"
+    style={
+      {
+        "height": 60,
+        "width": "90%",
+      }
+    }
+  />
+  <span
+    className="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-wave css-1hirv1y-MuiSkeleton-root"
+    style={
+      {
+        "height": 60,
+        "width": "100%",
+      }
+    }
+  />
+</div>
+`;

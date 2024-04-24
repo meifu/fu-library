@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
+
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -12,59 +13,54 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 
 import { ArtistInterface } from '@/lib/definitions';
 import ArtistListSkeleton from '../components/ArtistListSkeleton';
 import BasicContainer from '../components/BasicContainer';
+import Title from '../components/Title';
+import { deleteArtist, fetchArtists } from '@/lib/action';
 
 export default function Page() {
   const [artists, setArtists] = useState<ArtistInterface[]>([]);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState<boolean>(false);
   const [isDeleteOk, setIsDeleteOk] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const data = useSession();
+  let isLogin = data?.status === 'authenticated' ? true : false;
+  console.log('session', data);
+
+  const getArtists = async () => {
+    setIsLoading(true);
+    const artists: ArtistInterface[] | undefined = await fetchArtists();
+
+    if (artists) {
+      setArtists(artists);
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch('/artists')
-      .then((res) => res.json())
-      .then((data) => {
-        setArtists(data.data);
-        setIsLoading(false);
-      });
+    getArtists();
   }, []);
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
+    console.log(reason);
     if (reason === 'clickaway') {
       return;
     }
-    setIsOpen(false);
-  };
-
-  const refreshPage = () => {
-    setIsLoading(true);
-    fetch('/artists')
-      .then((res) => res.json())
-      .then((data) => {
-        setArtists(data.data);
-        setIsLoading(false);
-      });
+    setIsSnackBarOpen(false);
   };
 
   return (
     <BasicContainer>
-      <Typography variant="h4" marginBottom="15px">
-        Artists that I payed attention:
-      </Typography>
+      <Title variant="h3" text="Artists that I noticed:" />
 
       {isLoading ? (
         <ArtistListSkeleton />
       ) : (
-        // <Paper elevation={3}>
         <List>
           {artists.map((ar) => {
             return (
@@ -79,21 +75,18 @@ export default function Page() {
                 <Button
                   size="small"
                   onClick={async () => {
-                    const res = await fetch('/artist/api', {
-                      method: 'DELETE',
-                      body: JSON.stringify({
-                        id: ar.id,
-                      }),
-                    });
-                    const data = await res.json();
-                    setIsOpen(true);
+                    if (!ar.id) return;
+                    const data = await deleteArtist(ar.id);
+
+                    setIsSnackBarOpen(true);
                     if (data.isSuccess) {
                       setIsDeleteOk(true);
-                      refreshPage();
+                      getArtists();
                     } else {
                       setIsDeleteOk(false);
                     }
                   }}
+                  disabled={!isLogin}
                 >
                   <DeleteIcon fontSize="small" />
                 </Button>
@@ -101,19 +94,19 @@ export default function Page() {
             );
           })}
         </List>
-        // </Paper>
       )}
       <Fab
         color="primary"
         aria-label="add"
         href="/artist/add"
         sx={{ marginTop: '30px', float: 'right' }}
+        disabled={!isLogin}
       >
         Add
       </Fab>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={isOpen}
+        open={isSnackBarOpen}
         autoHideDuration={5000}
         onClose={handleClose}
       >

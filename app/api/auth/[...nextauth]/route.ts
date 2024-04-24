@@ -65,10 +65,10 @@ const nextAuthOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile, credentials }) {
-      console.log('==== cb user===', user);
-      console.log('account', account);
-      console.log('profile', profile);
-      console.log('credentials', credentials);
+      // console.log('==== cb user===', user);
+      // console.log('account', account);
+      // console.log('profile', profile);
+      // console.log('credentials', credentials);
       if (account?.provider === 'google' && user.email !== availableGoogleEmail) {
         return false;
       }

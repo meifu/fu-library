@@ -2,12 +2,12 @@
 
 import { ReactNode } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { blueGrey } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: blueGrey[800],
+      main: grey[800],
     },
     // mode: 'dark',
   },

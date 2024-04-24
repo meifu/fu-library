@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
-import { SessionProvider } from 'next-auth/react';
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import Container from '@mui/material/Container';
@@ -25,21 +24,24 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession();
-  /* sign in google session:
-  user: {
-    name: '',
-    email: '',
-    image: '',
+  let userData;
+  console.log('=======server session-=======', session);
+
+  if (session) {
+    userData = {
+      name: session?.user?.name || '',
+      email: session?.user?.email || '',
+    };
   }
-  */
+
   return (
     <html lang="en">
       <CssBaseline />
       <body>
-        <Container maxWidth="xl" sx={{ height: '100vh' }} disableGutters>
+        <Container maxWidth={false} sx={{ height: '100vh' }} disableGutters>
           <MyThemeProvider>
             <AuthProvider>
-              <Header />
+              <Header data={userData} />
               <Box sx={{ padding: '15px' }}>
                 <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
               </Box>

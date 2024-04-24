@@ -1,16 +1,16 @@
 'use client';
 
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import { putArtist } from '@/lib/action';
+import { fetchArtist, putArtist } from '@/lib/action';
 import { useEffect, useState } from 'react';
 import ArtistForm from '@/app/components/ArtistForm';
 import EditSkeleton from '@/app/components/EditSkeleton';
 import { ArtistInterface } from '@/lib/definitions';
 import BasicContainer from '@/app/components/BasicContainer';
+import Title from '@/app/components/Title';
 
 interface ArtistEditProps {
   params: {
@@ -24,13 +24,14 @@ export default function Page({ params }: ArtistEditProps) {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`/artist/api?id=${params.id}`)
-      .then((res) => res.json())
-      .then((data: { data: ArtistInterface }) => {
-        const { name, genre, image, description, tags, id } = data.data;
-        setData({ name, genre, image, description, tags, id });
-        setIsLoading(false);
-      });
+    fetchArtist(params.id).then((data) => {
+      if (!data) {
+        throw new Error('Error when getting artist data.');
+      }
+      const { name, genre, image, description, tags, id } = data;
+      setData({ name, genre, image, description, tags, id });
+      setIsLoading(false);
+    });
   }, [params.id]);
 
   return (
@@ -41,7 +42,7 @@ export default function Page({ params }: ArtistEditProps) {
         alignItems="center"
         marginBottom="30px"
       >
-        <Typography variant="h5">Edit Artist</Typography>
+        <Title variant="h5" text="Edit Artist" />
         <IconButton aria-label="back" href={`/artist/${params.id}`}>
           <ArrowBackIcon />
         </IconButton>

@@ -136,7 +136,7 @@ export default function ArtistForm({
               variant="contained"
               disabled={!formik.isValid || isLoading}
             >
-              Add Artist
+              {isEdit ? 'Update' : 'Add'} Artist
             </Button>
           </Stack>
         </Box>

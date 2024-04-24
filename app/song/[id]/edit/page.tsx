@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -8,6 +7,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SongForm from '@/app/components/SongForm';
 import { fetchSong, putSong } from '@/lib/action';
 import BasicContainer from '@/app/components/BasicContainer';
+import Title from '@/app/components/Title';
 
 interface SongEditProps {
   params: {
@@ -27,7 +27,7 @@ export default async function Page({ params }: SongEditProps) {
           alignItems="center"
           marginBottom="30px"
         >
-          <Typography variant="h5">Edit Song</Typography>
+          <Title text="Edit Song" variant="h5" />
           <IconButton aria-label="back" href={`/song/${params.id}`}>
             <ArrowBackIcon />
           </IconButton>

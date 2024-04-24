@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { fetchSong } from '@/lib/action';
 import { defaultSongValues } from '@/app/components/SongForm';
 import BasicContainer from '@/app/components/BasicContainer';
+import Title from '@/app/components/Title';
 
 interface SongPageProps {
   params: {
@@ -26,15 +27,7 @@ export default async function Page(
       <BasicContainer>
         {songData && (
           <Box>
-            <Typography
-              variant="h3"
-              marginTop="15px"
-              marginBottom="30px"
-              fontWeight="bold"
-              textAlign="center"
-            >
-              {name}
-            </Typography>
+            <Title text={name} />
             <iframe
               width="600"
               height="320"
@@ -59,12 +52,9 @@ export default async function Page(
                 </>
               )}
               {songData.description && (
-                <>
-                  <Typography variant="h6" gutterBottom>
-                    Description
-                  </Typography>
+                <Box mt={3}>
                   <p>{description}</p>
-                </>
+                </Box>
               )}
             </Box>
 

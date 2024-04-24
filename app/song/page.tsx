@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -11,15 +12,15 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Typography from '@mui/material/Typography';
 
 import { SongInterface, SongInterfaceDb } from '@/lib/definitions';
 import ListPageWrap from '../components/ListPageWrap';
 import ArtistListSkeleton from '../components/ArtistListSkeleton';
 import { deleteSong, fetchSongs } from '@/lib/action';
+import Title from '../components/Title';
 
 const transFormDbdata = (d: SongInterfaceDb): SongInterface => {
-  const displayedArtist = d.artists ? d.artists[0] : '';
+  const displayedArtist = d.artists ? d.artists[0].name : '';
   return {
     ...d,
     artists: displayedArtist,
@@ -32,6 +33,8 @@ export default function Page() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isDeleteOk, setIsDeleteOk] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const data = useSession();
+  let isLogin = data?.status === 'authenticated' ? true : false;
 
   const getSongs = async () => {
     setIsLoading(true);
@@ -59,9 +62,7 @@ export default function Page() {
 
   return (
     <ListPageWrap>
-      <Typography variant="h4" marginBottom="15px">
-        All songs list:
-      </Typography>
+      <Title text="All songs list:" variant="h3" />
       {isLoading ? (
         <ArtistListSkeleton />
       ) : (
@@ -90,6 +91,7 @@ export default function Page() {
                         setIsDeleteOk(false);
                       }
                     }}
+                    disabled={!isLogin}
                   >
                     <DeleteIcon fontSize="small" />
                   </Button>
@@ -103,6 +105,7 @@ export default function Page() {
         aria-label="add"
         href="/song/add"
         sx={{ marginTop: '30px', float: 'right' }}
+        disabled={!isLogin}
       >
         Add
       </Fab>
