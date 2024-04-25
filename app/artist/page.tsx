@@ -27,7 +27,6 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const data = useSession();
   let isLogin = data?.status === 'authenticated' ? true : false;
-  console.log('session', data);
 
   const getArtists = async () => {
     setIsLoading(true);

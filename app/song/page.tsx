@@ -14,10 +14,10 @@ import Fab from '@mui/material/Fab';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { SongInterface, SongInterfaceDb } from '@/lib/definitions';
-import ListPageWrap from '../components/ListPageWrap';
 import ArtistListSkeleton from '../components/ArtistListSkeleton';
 import { deleteSong, fetchSongs } from '@/lib/action';
 import Title from '../components/Title';
+import BasicContainer from '@/components/BasicContainer';
 
 const transFormDbdata = (d: SongInterfaceDb): SongInterface => {
   const displayedArtist = d.artists ? d.artists[0].name : '';
@@ -61,7 +61,7 @@ export default function Page() {
   };
 
   return (
-    <ListPageWrap>
+    <BasicContainer>
       <Title text="All songs list:" variant="h3" />
       {isLoading ? (
         <ArtistListSkeleton />
@@ -126,6 +126,6 @@ export default function Page() {
           Delete artist {isDeleteOk ? 'success' : 'failed'}!
         </Alert>
       </Snackbar>
-    </ListPageWrap>
+    </BasicContainer>
   );
 }

@@ -42,7 +42,7 @@ export default async function RootLayout({
           <MyThemeProvider>
             <AuthProvider>
               <Header data={userData} />
-              <Box sx={{ padding: '15px' }}>
+              <Box minHeight="100vh" pt={3} pb={3}>
                 <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
               </Box>
             </AuthProvider>

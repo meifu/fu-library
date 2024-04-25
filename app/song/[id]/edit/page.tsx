@@ -4,10 +4,10 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import SongForm from '@/app/components/SongForm';
+import SongForm from '@/components/SongForm';
 import { fetchSong, putSong } from '@/lib/action';
-import BasicContainer from '@/app/components/BasicContainer';
-import Title from '@/app/components/Title';
+import BasicContainer from '@/components/BasicContainer';
+import Title from '@/components/Title';
 
 interface SongEditProps {
   params: {

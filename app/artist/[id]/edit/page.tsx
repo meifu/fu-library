@@ -6,11 +6,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { fetchArtist, putArtist } from '@/lib/action';
 import { useEffect, useState } from 'react';
-import ArtistForm from '@/app/components/ArtistForm';
-import EditSkeleton from '@/app/components/EditSkeleton';
+import ArtistForm from '@/components/ArtistForm';
+import EditSkeleton from '@/components/EditSkeleton';
 import { ArtistInterface } from '@/lib/definitions';
-import BasicContainer from '@/app/components/BasicContainer';
-import Title from '@/app/components/Title';
+import BasicContainer from '@/components/BasicContainer';
+import Title from '@/components/Title';
 
 interface ArtistEditProps {
   params: {

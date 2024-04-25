@@ -14,6 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
 
 interface PageType {
   label: string;
@@ -116,9 +117,16 @@ export default function Header({ data }: HeaderProps) {
           >
             {pages.map((p, i) => (
               <MenuItem key={p.label}>
-                <NextLink href={p.href || ''}>
-                  <Typography textAlign="center">{p.label}</Typography>
-                </NextLink>
+                <Link
+                  component={NextLink}
+                  href={p.href || ''}
+                  underline="none"
+                  onClick={() => {
+                    setAnchorEl(null);
+                  }}
+                >
+                  {p.label}
+                </Link>
               </MenuItem>
             ))}
           </Menu>

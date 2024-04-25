@@ -6,10 +6,9 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
 import { fetchSong } from '@/lib/action';
-import { defaultSongValues } from '@/app/components/SongForm';
-import BasicContainer from '@/app/components/BasicContainer';
-import Title from '@/app/components/Title';
-import { SongInterface } from '@/lib/definitions';
+import { defaultSongValues } from '@/components/SongForm';
+import BasicContainer from '@/components/BasicContainer';
+import Title from '@/components/Title';
 
 interface SongPageProps {
   params?: {
@@ -27,22 +26,30 @@ export default async function Page({ params }: SongPageProps) {
 
   return (
     <Suspense fallback={<span>loading...</span>}>
-      <BasicContainer>
+      <Box
+        width="100%"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+      >
         {songData && (
-          <Box>
+          <>
             <Title text={name} />
-            <iframe
-              width="600"
-              height="320"
-              src={link}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
+            <Box width="100%" pl={1} pr={1}>
+              <iframe
+                width="100%"
+                // height="320"
+                src={link}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                style={{ aspectRatio: 16 / 9 }}
+              ></iframe>
+            </Box>
 
-            <Box width={600}>
+            <BasicContainer>
               <Typography variant="h6" gutterBottom mt={1}>
                 {artists}
               </Typography>
@@ -59,20 +66,20 @@ export default async function Page({ params }: SongPageProps) {
                   <p>{description}</p>
                 </Box>
               )}
-            </Box>
 
-            <Box width="100%" marginTop="60px">
-              <Link
-                href={`/song/${id}/edit`}
-                variant="button"
-                component={NextLink}
-              >
-                Update Song Data
-              </Link>
-            </Box>
-          </Box>
+              <Box width="100%" marginTop="60px">
+                <Link
+                  href={`/song/${id}/edit`}
+                  variant="button"
+                  component={NextLink}
+                >
+                  Update Song Data
+                </Link>
+              </Box>
+            </BasicContainer>
+          </>
         )}
-      </BasicContainer>
+      </Box>
     </Suspense>
   );
 }

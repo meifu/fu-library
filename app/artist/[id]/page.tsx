@@ -6,8 +6,8 @@ import Link from '@mui/material/Link';
 import Chip from '@mui/material/Chip';
 
 import { fetchArtist } from '@/lib/action';
-import BasicContainer from '@/app/components/BasicContainer';
-import Title from '@/app/components/Title';
+import BasicContainer from '@/components/BasicContainer';
+import Title from '@/components/Title';
 
 interface ArtistPageProps {
   params?: {
@@ -27,9 +27,10 @@ export default async function Page({ params }: ArtistPageProps) {
         <>
           <Title text={artistData.name} />
           <Box
-            sx={{ position: 'relative', overflow: 'hidden' }}
+            position="relative"
             width="100%"
-            height="500px"
+            overflow="hidden"
+            sx={{ aspectRatio: 16 / 9 }}
           >
             <Image
               src={artistData.image}

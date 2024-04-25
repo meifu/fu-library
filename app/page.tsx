@@ -33,21 +33,23 @@ export default function Page() {
           <li>CI/CD</li>
         </ul>
 
-        <Box mt={3} padding={2} borderRadius={2} bgcolor="gainsboro">
-          <Typography variant="body2" fontSize="12px">
+        <Box
+          mt={3}
+          padding={2}
+          borderRadius={2}
+          bgcolor="gainsboro"
+          fontSize="12px"
+          border="solid"
+          borderColor="cadetblue"
+        >
+          <Typography variant="body2">
             PS. I am looking for a frontend job now. Please drop me a message if
             you know there is any opportunities. <br />
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginTop: '5px',
-              }}
-            >
-              <MailOutlineIcon fontSize="small" sx={{ marginRight: '5px' }} />
-              <span>Email: schwarzmeifu@gmail.com</span>
-            </div>
           </Typography>
+          <Box mt="5px" display="flex" alignItems="center">
+            <MailOutlineIcon fontSize="small" sx={{ marginRight: '5px' }} />
+            <Typography variant="body2">schwarzmeifu@gmail.com</Typography>
+          </Box>
         </Box>
       </BasicContainer>
     </main>
