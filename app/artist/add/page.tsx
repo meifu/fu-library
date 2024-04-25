@@ -2,7 +2,7 @@ import Typography from '@mui/material/Typography';
 
 import { createArtist } from '@/lib/action';
 import ArtistForm from '../../components/ArtistForm';
-import BasicContainer from '@/components/BasicContainer';
+import BasicContainer from '../../components/BasicContainer';
 
 export default function Page() {
   return (

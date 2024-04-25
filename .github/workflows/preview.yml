@@ -1,9 +1,11 @@
-name: 'Meifu Simple Workflow'
+name: 'Deploy Next.js to vercel'
 run-name: '${{ github.actor }} just pushed! 🚀'
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-on: push
+on:
+  push:
+    branches: ['main']
 
 jobs:
   build:
