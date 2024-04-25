@@ -158,7 +158,6 @@ export async function fetchArtists() {
 }
 
 export async function fetchArtist(artistId: string) {
-  console.log('!!!!!!!!!!', typeof artistId);
   try {
     const data = await prismadb.artist.findUnique({
       where: {

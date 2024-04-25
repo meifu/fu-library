@@ -27,6 +27,7 @@ export default function Title({
       gutterBottom={gutterBottom}
       fontFamily={TitleFont.style.fontFamily}
       textAlign={textAlign}
+      padding="0 15px"
     >
       {text}
     </Typography>
