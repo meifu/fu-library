@@ -3,7 +3,6 @@
 import { ReactNode } from 'react';
 
 import Box from '@mui/material/Box';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { styled } from '@mui/material/styles';
 
 const MyBox = styled(Box)(({ theme }) => ({

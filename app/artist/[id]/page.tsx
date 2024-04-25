@@ -5,9 +5,9 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Chip from '@mui/material/Chip';
 
-import { fetchArtist } from '@/lib/action';
-import BasicContainer from '@/components/BasicContainer';
-import Title from '@/components/Title';
+import { fetchArtist } from '../../../lib/action';
+import BasicContainer from '../../_components/BasicContainer';
+import Title from '../../_components/Title';
 
 interface ArtistPageProps {
   params?: {

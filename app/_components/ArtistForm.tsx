@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
-import { ArtistInterface } from '@/lib/definitions';
+import { ArtistInterface } from '../../lib/definitions';
 
 interface InputFieldType {
   label: string;

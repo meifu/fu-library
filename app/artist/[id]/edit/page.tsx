@@ -6,12 +6,12 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import ArtistForm from '../../../components/ArtistForm';
-import EditSkeleton from '@/components/EditSkeleton';
-import BasicContainer from '@/components/BasicContainer';
-import Title from '@/components/Title';
-import { ArtistInterface } from '@/lib/definitions';
-import { fetchArtist, putArtist } from '@/lib/action';
+import ArtistForm from '../../../_components/ArtistForm';
+import EditSkeleton from '../../../_components/EditSkeleton';
+import BasicContainer from '../../../_components/BasicContainer';
+import Title from '../../../_components/Title';
+import { ArtistInterface } from '../../../../lib/definitions';
+import { fetchArtist, putArtist } from '../../../../lib/action';
 
 interface ArtistEditProps {
   params: {

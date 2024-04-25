@@ -5,9 +5,9 @@ import bcrypt from 'bcrypt';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-import { User } from '@/lib/definitions';
+import { User } from '../../../../lib/definitions';
 
-import prismadb from '@/lib/db';
+import prismadb from '../../../../lib/db';
 
 const availableGoogleEmail = process.env.GOOGLE_EMAIL;
 

@@ -2,8 +2,8 @@ import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
-import BasicContainer from './components/BasicContainer';
-import Title from './components/Title';
+import BasicContainer from './_components/BasicContainer';
+import Title from './_components/Title';
 
 export default function Page() {
   return (
@@ -39,8 +39,7 @@ export default function Page() {
           borderRadius={2}
           bgcolor="gainsboro"
           fontSize="12px"
-          border="solid"
-          borderColor="cadetblue"
+          boxShadow={1}
         >
           <Typography variant="body2">
             PS. I am looking for a frontend job now. Please drop me a message if

@@ -1,8 +1,8 @@
 import Typography from '@mui/material/Typography';
 
-import { createArtist } from '@/lib/action';
-import ArtistForm from '../../components/ArtistForm';
-import BasicContainer from '../../components/BasicContainer';
+import { createArtist } from '../../../lib/action';
+import ArtistForm from '../../_components/ArtistForm';
+import BasicContainer from '../../_components/BasicContainer';
 
 export default function Page() {
   return (

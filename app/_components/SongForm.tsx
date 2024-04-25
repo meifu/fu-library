@@ -12,8 +12,8 @@ import FormHelperText from '@mui/material/FormHelperText';
 import { z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
-import { ArtistInterface, SongInterface } from '@/lib/definitions';
-import { fetchArtists } from '@/lib/action';
+import { ArtistInterface, SongInterface } from '../../lib/definitions';
+import { fetchArtists } from '../../lib/action';
 
 interface InputFieldType {
   label: string;
@@ -122,7 +122,7 @@ const editSpecificField: InputFieldType[] = [
 ];
 
 interface SongFormProps {
-  onSubmit: (formData: SongInterface) => any;
+  onSubmit: (formData: SongInterface) => Promise<any>;
   data?: SongInterface;
   isEdit?: boolean;
 }
@@ -151,6 +151,7 @@ export default function SongForm({
   const [artists, setArtists] = useState<ArtistInterface[]>([]);
   const [isArtistsLoading, setIsArtistsLoading] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
 
   useEffect(() => {
     setIsArtistsLoading(true);
@@ -163,9 +164,18 @@ export default function SongForm({
   const formik = useFormik({
     initialValues: data,
     validationSchema: toFormikValidationSchema(validationSchema),
-    onSubmit: (values) => {
-      onSubmit(values);
-      setIsLoading(true);
+    onSubmit: async (values) => {
+      onSubmit(values)
+        .then((res) => {
+          console.log('submit res', res);
+        })
+        .catch((reason) => {
+          console.log({ reason });
+          setHasError(true);
+        })
+        .finally(() => {
+          setIsLoading(true);
+        });
     },
     validateOnChange: true,
   });
@@ -196,6 +206,17 @@ export default function SongForm({
                 />
               );
             })}
+            {hasError && (
+              <Box
+                border="solid"
+                borderColor="darkred"
+                borderRadius={1}
+                color="darkred"
+                padding={1}
+              >
+                Something went wrong, please try again.
+              </Box>
+            )}
             <Button
               type="submit"
               variant="contained"

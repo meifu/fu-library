@@ -5,10 +5,10 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
-import { fetchSong } from '@/lib/action';
-import { defaultSongValues } from '@/components/SongForm';
-import BasicContainer from '@/components/BasicContainer';
-import Title from '@/components/Title';
+import { fetchSong } from '../../../lib/action';
+import { defaultSongValues } from '../../_components/SongForm';
+import BasicContainer from '../../_components/BasicContainer';
+import Title from '../../_components/Title';
 
 interface SongPageProps {
   params?: {

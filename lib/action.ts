@@ -4,8 +4,8 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import prismadb from '@/lib/db';
-import { ArtistInterface, SongInterface } from '@/lib/definitions';
+import prismadb from './db';
+import { ArtistInterface, SongInterface } from './definitions';
 
 const CreateArtistFormSchema = z.object({
   id: z.string(),
@@ -158,6 +158,7 @@ export async function fetchArtists() {
 }
 
 export async function fetchArtist(artistId: string) {
+  console.log('!!!!!!!!!!', typeof artistId);
   try {
     const data = await prismadb.artist.findUnique({
       where: {
@@ -182,6 +183,7 @@ const createSongSchema = z.object({
   lyrics: z.optional(z.string()),
   description: z.string(),
   artists: z.string(),
+  artistId: z.string(),
 });
 
 export type SongState = {
@@ -200,7 +202,7 @@ const createSongSchemaObj = createSongSchema.omit({ id: true });
 export async function createSong(formData: SongInterface) { 
   const { name, link, lyrics, description, artists, artistId } = formData;
   const validatedFields = createSongSchemaObj.safeParse({
-    name, link, lyrics, description, artists
+    name, link, lyrics, description, artists, artistId,
   });
 
   if (!validatedFields.success) {
@@ -210,7 +212,7 @@ export async function createSong(formData: SongInterface) {
     };
   }
 
-  const theArtist: ArtistInterface | null = await fetchArtist(validatedFields.data.artists);
+  const theArtist: ArtistInterface | null = await fetchArtist(validatedFields.data.artistId);
   if (!theArtist) {
     throw new Error('Database error: No artist found.');
   }
@@ -219,10 +221,10 @@ export async function createSong(formData: SongInterface) {
     await prismadb.song.create({
       data: {
         ...validatedFields.data,
-        // artistId: [validatedFields.data.artists],
         artists: {
-          connect: [{ id: validatedFields.data.artists }],
+          connect: [{ id: validatedFields.data.artistId }],
         },
+        artistId: [validatedFields.data.artistId],
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -234,7 +236,9 @@ export async function createSong(formData: SongInterface) {
   } catch (error) {
     console.log({ error });
     return {
+      isSuccess: false,
       message: 'Database Error: Failed to Create Song.',
+      error,
     };
   } finally {
     prismadb.$disconnect();

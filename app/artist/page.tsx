@@ -14,11 +14,11 @@ import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { ArtistInterface } from '@/lib/definitions';
-import ArtistListSkeleton from '../components/ArtistListSkeleton';
-import BasicContainer from '../components/BasicContainer';
-import Title from '../components/Title';
-import { deleteArtist, fetchArtists } from '@/lib/action';
+import { ArtistInterface } from '../../lib/definitions';
+import ArtistListSkeleton from '../_components/ArtistListSkeleton';
+import BasicContainer from '../_components/BasicContainer';
+import Title from '../_components/Title';
+import { deleteArtist, fetchArtists } from '../../lib/action';
 
 export default function Page() {
   const [artists, setArtists] = useState<ArtistInterface[]>([]);

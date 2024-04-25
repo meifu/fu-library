@@ -13,11 +13,11 @@ import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { SongInterface, SongInterfaceDb } from '@/lib/definitions';
-import ArtistListSkeleton from '../components/ArtistListSkeleton';
-import { deleteSong, fetchSongs } from '@/lib/action';
-import Title from '../components/Title';
-import BasicContainer from '@/components/BasicContainer';
+import { SongInterface, SongInterfaceDb } from '../../lib/definitions';
+import ArtistListSkeleton from '../_components/ArtistListSkeleton';
+import Title from '../_components/Title';
+import BasicContainer from '../_components/BasicContainer';
+import { deleteSong, fetchSongs } from '../../lib/action';
 
 const transFormDbdata = (d: SongInterfaceDb): SongInterface => {
   const displayedArtist = d.artists ? d.artists[0].name : '';

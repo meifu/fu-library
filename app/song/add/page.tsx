@@ -1,8 +1,8 @@
 import Typography from '@mui/material/Typography';
 
-import SongForm from '@/components/SongForm';
-import { createSong } from '@/lib/action';
-import BasicContainer from '@/components/BasicContainer';
+import SongForm from '../../_components/SongForm';
+import BasicContainer from '../../_components/BasicContainer';
+import { createSong } from '../../../lib/action';
 
 export default function Page() {
   return (
