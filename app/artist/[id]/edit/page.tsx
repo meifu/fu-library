@@ -1,16 +1,17 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import { fetchArtist, putArtist } from '@/lib/action';
-import { useEffect, useState } from 'react';
-import ArtistForm from '@/components/ArtistForm';
+import ArtistForm from '../../../components/ArtistForm';
 import EditSkeleton from '@/components/EditSkeleton';
-import { ArtistInterface } from '@/lib/definitions';
 import BasicContainer from '@/components/BasicContainer';
 import Title from '@/components/Title';
+import { ArtistInterface } from '@/lib/definitions';
+import { fetchArtist, putArtist } from '@/lib/action';
 
 interface ArtistEditProps {
   params: {
