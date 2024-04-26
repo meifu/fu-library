@@ -148,6 +148,7 @@ export async function deleteArtist(artistId: string) {
 
 export async function fetchArtists() {
   try {
+    console.log('~~~~~~~~~', prismadb)
     const data = await prismadb.artist.findMany({});
     return data;
   } catch (error) {
