@@ -36,10 +36,10 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <CssBaseline />
       <body>
         <Container maxWidth={false} sx={{ height: '100vh' }} disableGutters>
           <MyThemeProvider>
+            <CssBaseline />
             <AuthProvider>
               <Header data={userData} />
               <Box minHeight="100vh" pt={3} pb={3}>

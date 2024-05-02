@@ -2,13 +2,10 @@
 
 import { ReactNode } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: grey[800],
-    },
+    mode: 'dark',
   },
   typography: {
     h2: {

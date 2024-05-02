@@ -10,9 +10,11 @@ const TitleFont = Alegreya_Sans_SC({
 
 interface Props {
   text: string;
-  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2';
   gutterBottom?: boolean;
   textAlign?: 'center' | 'left' | 'right';
+  mt?: number;
+  mb?: number;
 }
 
 export default function Title({
@@ -20,6 +22,8 @@ export default function Title({
   variant = 'h2',
   gutterBottom = true,
   textAlign = 'center',
+  mt,
+  mb,
 }: Props) {
   return (
     <Typography
@@ -28,6 +32,8 @@ export default function Title({
       fontFamily={TitleFont.style.fontFamily}
       textAlign={textAlign}
       padding="0 15px"
+      mt={mt}
+      mb={mb}
     >
       {text}
     </Typography>
