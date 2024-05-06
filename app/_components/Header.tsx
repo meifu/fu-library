@@ -42,7 +42,7 @@ const signInPage: PageType[] = [
 
 const signOutPage: PageType[] = [
   {
-    label: 'Log out',
+    label: 'Log Out',
     onClick: () => {
       signOut();
     },

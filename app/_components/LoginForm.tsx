@@ -82,7 +82,7 @@ export default function LoginForm() {
             </Button>
           </Stack>
         </form>
-        <Typography variant="h6" textAlign="center">
+        {/* <Typography variant="h6" textAlign="center">
           OR
         </Typography>
         <Button
@@ -96,7 +96,7 @@ export default function LoginForm() {
           }}
         >
           Log in with google account
-        </Button>
+        </Button> */}
       </Stack>
     </FormikProvider>
   );

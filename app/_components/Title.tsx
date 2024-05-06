@@ -15,6 +15,7 @@ interface Props {
   textAlign?: 'center' | 'left' | 'right';
   mt?: number;
   mb?: number;
+  pd?: string;
 }
 
 export default function Title({
@@ -24,6 +25,7 @@ export default function Title({
   textAlign = 'center',
   mt,
   mb,
+  pd,
 }: Props) {
   return (
     <Typography
@@ -31,7 +33,7 @@ export default function Title({
       gutterBottom={gutterBottom}
       fontFamily={TitleFont.style.fontFamily}
       textAlign={textAlign}
-      padding="0 15px"
+      padding={pd}
       mt={mt}
       mb={mb}
     >

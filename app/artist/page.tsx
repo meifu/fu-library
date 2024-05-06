@@ -99,7 +99,6 @@ export default function Page() {
         aria-label="add"
         href="/artist/add"
         sx={{ marginTop: '30px', float: 'right' }}
-        disabled={!isLogin}
       >
         Add
       </Fab>

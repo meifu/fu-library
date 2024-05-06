@@ -26,7 +26,14 @@ export default async function Page({ params }: SongPageProps) {
 
   console.log({ lyrics });
   return (
-    <Box width="100%" display="flex" flexDirection="column" alignItems="center">
+    <Box
+      width="100%"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      maxWidth={1200}
+      margin="0 auto"
+    >
       {songData && (
         <>
           <Title text={name} />
@@ -44,13 +51,19 @@ export default async function Page({ params }: SongPageProps) {
           </Box>
 
           <BasicContainer>
-            <Title text={artists || ''} variant="h6" mb={2} textAlign="left" />
+            <Title
+              text={artists || ''}
+              variant="h6"
+              mb={2}
+              textAlign="left"
+              pd="0"
+            />
 
             {lyrics && (
               <>
                 <Chip label="Lyrics" />
                 <Typography
-                  variant="body1"
+                  variant="body2"
                   mt={1}
                   sx={{ whiteSpace: 'pre-line' }}
                 >

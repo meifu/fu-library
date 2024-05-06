@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Chip from '@mui/material/Chip';
+import { Typography } from '@mui/material';
 
 import { fetchArtist } from '../../../lib/action';
 import BasicContainer from '../../_components/BasicContainer';
@@ -22,7 +23,14 @@ export default async function Page({ params }: ArtistPageProps) {
   }
 
   return (
-    <Box width="100%" display="flex" flexDirection="column" alignItems="center">
+    <Box
+      width="100%"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      maxWidth={1200}
+      margin="0 auto"
+    >
       {artistData ? (
         <>
           <Title text={artistData.name} />
@@ -40,8 +48,14 @@ export default async function Page({ params }: ArtistPageProps) {
             />
           </Box>
           <BasicContainer>
-            <p>Genre: {artistData.genre}</p>
-            <p>Description: {artistData.description}</p>
+            <Box display="flex" alignItems="center" mb={3}>
+              <Chip label="Genre" />
+              <Typography variant="body1" ml={2}>
+                {artistData.genre}
+              </Typography>
+            </Box>
+
+            <Typography variant="body1">{artistData.description}</Typography>
             {!!artistData.tags && <Chip label={artistData.tags} />}
 
             <Box width="100%" marginTop="60px">
