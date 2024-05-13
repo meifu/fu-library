@@ -1,10 +1,11 @@
+import Image from 'next/image';
 import NextLink from 'next/link';
 
-import Image from 'next/image';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Chip from '@mui/material/Chip';
 import { Typography } from '@mui/material';
+import Fab from '@mui/material/Fab';
+import Link from '@mui/material/Link';
 
 import { fetchArtist } from '../../../lib/action';
 import BasicContainer from '../../_components/BasicContainer';
@@ -45,28 +46,39 @@ export default async function Page({ params }: ArtistPageProps) {
               alt={`${artistData.name}-image`}
               fill
               style={{ objectFit: 'contain' }}
+              priority
             />
           </Box>
           <BasicContainer>
             <Box display="flex" alignItems="center" mb={3}>
-              <Chip label="Genre" />
-              <Typography variant="body1" ml={2}>
+              <Title variant="body1" text="Genre:" mb={0} />
+              <Typography variant="body2" ml={2}>
                 {artistData.genre}
               </Typography>
             </Box>
 
-            <Typography variant="body1">{artistData.description}</Typography>
+            <Typography variant="body1" mb={3}>
+              {artistData.description}
+            </Typography>
             {!!artistData.tags && <Chip label={artistData.tags} />}
 
-            <Box width="100%" marginTop="60px">
-              <Link
-                href={`/artist/${artistData.id}/edit`}
-                variant="button"
-                component={NextLink}
-              >
-                Update Artist Data
+            {artistData.songs.length > 0 && (
+              <Title variant="h6" text="SONGS" mt={5} />
+            )}
+            {artistData.songs.map((s) => (
+              <Link key={s.id} href={`/song/${s.id}`} component={NextLink}>
+                {s.name}
               </Link>
-            </Box>
+            ))}
+
+            <Fab
+              color="primary"
+              aria-label="edit"
+              href={`/artist/${artistData.id}/edit`}
+              sx={{ marginTop: '30px', float: 'right' }}
+            >
+              Edit
+            </Fab>
           </BasicContainer>
         </>
       ) : (

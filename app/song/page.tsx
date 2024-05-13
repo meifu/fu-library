@@ -18,6 +18,7 @@ import ArtistListSkeleton from '../_components/ArtistListSkeleton';
 import Title from '../_components/Title';
 import BasicContainer from '../_components/BasicContainer';
 import { deleteSong, fetchSongs } from '../../lib/action';
+import { Typography } from '@mui/material';
 
 const transFormDbdata = (d: SongInterfaceDb): SongInterface => {
   const displayedArtist = d.artists ? d.artists[0].name : '';
@@ -75,14 +76,14 @@ export default function Page() {
                     sx={{ borderLeft: 'solid', marginBottom: '10px' }}
                   >
                     <ListItemButton href={`/song/${s.id}`}>
-                      {s.name}
+                      {s.name} -&nbsp;
+                      <Typography variant="body2">{s.artists}</Typography>
                     </ListItemButton>
                   </ListItemText>
                   <Button
                     size="small"
                     onClick={async () => {
                       const data = await deleteSong(s.id as string);
-                      console.log('test delete', data);
                       setIsOpen(true);
                       if (data.isSuccess) {
                         setIsDeleteOk(true);

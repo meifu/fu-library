@@ -148,7 +148,6 @@ export async function deleteArtist(artistId: string) {
 
 export async function fetchArtists() {
   try {
-    console.log('~~~~~~~~~', prismadb)
     const data = await prismadb.artist.findMany({});
     return data;
   } catch (error) {
@@ -163,6 +162,9 @@ export async function fetchArtist(artistId: string) {
     const data = await prismadb.artist.findUnique({
       where: {
         id: artistId,
+      },
+      include: {
+        songs: true,
       },
     });
     return data;
@@ -222,15 +224,15 @@ export async function createSong(formData: SongInterface) {
       data: {
         ...validatedFields.data,
         artists: {
-          connect: [{ id: validatedFields.data.artistId }],
+          connect: { id: validatedFields.data.artistId },
         },
         artistId: [validatedFields.data.artistId],
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      include: {
-        artists: true,
-      }
+      // include: {
+      //   artists: true,
+      // }
     });
 
   } catch (error) {
@@ -250,7 +252,11 @@ export async function createSong(formData: SongInterface) {
 
 export async function fetchSongs() {
   try {
-    const data = await prismadb.song.findMany({});
+    const data = await prismadb.song.findMany({
+      include: {
+        artists: true,
+      },
+    });
     return data;
   } catch (error) {
     console.log('Database error: Failed to fetch songs', error);
@@ -299,6 +305,7 @@ export async function putSong(formData: SongInterface) {
     lyric: formData.lyrics,
     description: formData.description,
     artists: formData.artists,
+    artistId: formData.artistId,
   });
 
   if (!validatedFields.success) {
@@ -307,18 +314,30 @@ export async function putSong(formData: SongInterface) {
       message: 'Missing Fields. Failed to Put Song',
     };
   }
+  const { id, artistId, name, link, lyrics, description } = validatedFields.data;
 
   try {
-    // find artist id
+    await prismadb.song.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        link,
+        lyrics,
+        description,
+        artistId: [artistId],
+      },
+    });
     
-    return {
-      isSuccess: true,
-    }
   } catch (error) {
-    throw new Error(`Database error: failed to put song ${formData.name}`)
+    throw new Error(`Database error: failed to put song ${formData.name}: ${error}`)
   } finally {
     prismadb.$disconnect();
   }
+
+  revalidatePath(`/song/${formData.id}`);
+  redirect(`/song/${formData.id}`);
 }
 
 export async function deleteSong(songId: string) {

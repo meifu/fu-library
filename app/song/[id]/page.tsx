@@ -1,9 +1,7 @@
-import NextLink from 'next/link';
-
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
+import Fab from '@mui/material/Fab';
 
 import { fetchSong } from '../../../lib/action';
 import { defaultSongValues } from '../../_components/SongForm';
@@ -24,7 +22,6 @@ export default async function Page({ params }: SongPageProps) {
   const { name, link, lyrics, description, artists, id } =
     songData || defaultSongValues;
 
-  console.log({ lyrics });
   return (
     <Box
       width="100%"
@@ -77,15 +74,14 @@ export default async function Page({ params }: SongPageProps) {
               </Box>
             )}
 
-            <Box width="100%" marginTop="60px">
-              <Link
-                href={`/song/${id}/edit`}
-                variant="button"
-                component={NextLink}
-              >
-                Update Song Data
-              </Link>
-            </Box>
+            <Fab
+              color="primary"
+              aria-label="edit"
+              href={`/song/${id}/edit`}
+              sx={{ marginTop: '30px', float: 'right' }}
+            >
+              Edit
+            </Fab>
           </BasicContainer>
         </>
       )}
