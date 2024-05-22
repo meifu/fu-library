@@ -42,7 +42,7 @@ export default async function RootLayout({
             <CssBaseline />
             <AuthProvider>
               <Header data={userData} />
-              <Box minHeight="100vh" pt={3} pb={3}>
+              <Box minHeight="100vh" pt={9} pb={3}>
                 <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
               </Box>
             </AuthProvider>

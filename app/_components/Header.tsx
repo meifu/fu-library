@@ -72,7 +72,7 @@ export default function Header({ data }: HeaderProps) {
     : pages.concat(signInPage);
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar>
         <Button href="/" sx={{ color: 'white' }} disableRipple>
           <LibraryMusicIcon sx={{ mr: 1 }} />

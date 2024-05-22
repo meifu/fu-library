@@ -1,15 +1,12 @@
-import Typography from '@mui/material/Typography';
-
 import SongForm from '../../_components/SongForm';
 import BasicContainer from '../../_components/BasicContainer';
 import { createSong } from '../../../lib/action';
+import Title from '../../_components/Title';
 
 export default function Page() {
   return (
     <BasicContainer>
-      <Typography variant="h5" marginBottom="30px">
-        Add song
-      </Typography>
+      <Title variant="h3" mb={3} text="Add song" />
       <SongForm onSubmit={createSong} />
     </BasicContainer>
   );
