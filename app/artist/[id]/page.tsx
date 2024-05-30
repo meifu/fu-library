@@ -6,6 +6,7 @@ import Chip from '@mui/material/Chip';
 import { Typography } from '@mui/material';
 import Fab from '@mui/material/Fab';
 import Link from '@mui/material/Link';
+import List from '@mui/material/List';
 
 import { fetchArtist } from '../../../lib/action';
 import BasicContainer from '../../_components/BasicContainer';
@@ -34,7 +35,7 @@ export default async function Page({ params }: ArtistPageProps) {
     >
       {artistData ? (
         <>
-          <Title text={artistData.name} />
+          <Title text={artistData.name} mt={3} />
           <Box
             position="relative"
             width="100%"
@@ -63,19 +64,25 @@ export default async function Page({ params }: ArtistPageProps) {
             {!!artistData.tags && <Chip label={artistData.tags} />}
 
             {artistData.songs.length > 0 && (
-              <Title variant="h6" text="SONGS" mt={5} />
+              <Title variant="h5" text="SONGS" mt={6} textAlign="left" />
             )}
             {artistData.songs.map((s) => (
-              <Link key={s.id} href={`/song/${s.id}`} component={NextLink}>
-                {s.name}
-              </Link>
+              <List key={s.id}>
+                <Link
+                  href={`/song/${s.id}`}
+                  component={NextLink}
+                  underline="hover"
+                >
+                  {s.name}
+                </Link>
+              </List>
             ))}
 
             <Fab
               color="primary"
               aria-label="edit"
               href={`/artist/${artistData.id}/edit`}
-              sx={{ marginTop: '30px', float: 'right' }}
+              sx={{ marginTop: '100px', float: 'right' }}
             >
               Edit
             </Fab>

@@ -141,6 +141,7 @@ const validationSchema = z.object({
   name: z.string(),
   link: z.string().url(),
   lyrics: z.optional(z.string()),
+  artistId: z.string(),
 });
 
 export default function SongForm({
@@ -214,7 +215,7 @@ export default function SongForm({
                 color="darkred"
                 padding={1}
               >
-                Something went wrong, please try again.
+                Something went wrong, please refresh and try again.
               </Box>
             )}
             <Button

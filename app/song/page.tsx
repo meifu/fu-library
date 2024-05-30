@@ -12,13 +12,16 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 import { SongInterface, SongInterfaceDb } from '../../lib/definitions';
 import ArtistListSkeleton from '../_components/ArtistListSkeleton';
 import Title from '../_components/Title';
 import BasicContainer from '../_components/BasicContainer';
 import { deleteSong, fetchSongs } from '../../lib/action';
-import { Typography } from '@mui/material';
+import { modalInnerStyle } from '../_utils';
 
 const transFormDbdata = (d: SongInterfaceDb): SongInterface => {
   const displayedArtist = d.artists ? d.artists[0].name : '';
@@ -31,7 +34,7 @@ const transFormDbdata = (d: SongInterfaceDb): SongInterface => {
 
 export default function Page() {
   const [songs, setSongs] = useState<SongInterface[] | undefined>();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
   const [isDeleteOk, setIsDeleteOk] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const data = useSession();
@@ -58,7 +61,7 @@ export default function Page() {
     if (reason === 'clickaway') {
       return;
     }
-    setIsOpen(false);
+    setIsSnackbarOpen(false);
   };
 
   return (
@@ -71,32 +74,14 @@ export default function Page() {
           {songs &&
             songs.map((s) => {
               return (
-                <ListItem key={s.id} disablePadding>
-                  <ListItemText
-                    sx={{ borderLeft: 'solid', marginBottom: '10px' }}
-                  >
-                    <ListItemButton href={`/song/${s.id}`}>
-                      {s.name} -&nbsp;
-                      <Typography variant="body2">{s.artists}</Typography>
-                    </ListItemButton>
-                  </ListItemText>
-                  <Button
-                    size="small"
-                    onClick={async () => {
-                      const data = await deleteSong(s.id as string);
-                      setIsOpen(true);
-                      if (data.isSuccess) {
-                        setIsDeleteOk(true);
-                        getSongs();
-                      } else {
-                        setIsDeleteOk(false);
-                      }
-                    }}
-                    disabled={!isLogin}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </Button>
-                </ListItem>
+                <SongItem
+                  key={s.id}
+                  song={s}
+                  setIsDeleteOk={setIsDeleteOk}
+                  setIsOpen={setIsSnackbarOpen}
+                  isLogin={isLogin}
+                  refresh={getSongs}
+                />
               );
             })}
         </List>
@@ -105,14 +90,13 @@ export default function Page() {
         color="primary"
         aria-label="add"
         href="/song/add"
-        sx={{ marginTop: '30px', float: 'right' }}
-        disabled={!isLogin}
+        sx={{ marginTop: '100px', float: 'right' }}
       >
         Add
       </Fab>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={isOpen}
+        open={isSnackbarOpen}
         autoHideDuration={5000}
         onClose={handleClose}
       >
@@ -130,3 +114,80 @@ export default function Page() {
     </BasicContainer>
   );
 }
+
+interface SongItemProps {
+  song: SongInterface;
+  isLogin: boolean;
+  setIsOpen: (open: boolean) => any;
+  setIsDeleteOk: (ok: boolean) => any;
+  refresh: () => any;
+}
+
+const SongItem = ({
+  song,
+  isLogin,
+  setIsOpen,
+  setIsDeleteOk,
+  refresh,
+}: SongItemProps) => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const deleteSongHandler = async () => {
+    const data = await deleteSong(song.id as string);
+    setIsOpen(true);
+    if (data.isSuccess) {
+      setIsDeleteOk(true);
+      refresh();
+    } else {
+      setIsDeleteOk(false);
+    }
+  };
+
+  return (
+    <>
+      <ListItem disablePadding>
+        <ListItemText sx={{ marginBottom: '10px' }}>
+          <ListItemButton href={`/song/${song.id}`}>
+            {song.name} -&nbsp;
+            <Typography variant="body2">{song.artists}</Typography>
+          </ListItemButton>
+        </ListItemText>
+        <Button
+          size="small"
+          onClick={async () => {
+            setModalOpen(true);
+          }}
+          disabled={!isLogin}
+        >
+          <DeleteIcon fontSize="small" />
+        </Button>
+      </ListItem>
+      <Modal
+        open={modalOpen}
+        aria-labelledby="confirm-delete-modal"
+        aria-describedby="confirm-delete-modal"
+        onClose={() => {
+          setModalOpen(false);
+        }}
+      >
+        <Box sx={modalInnerStyle}>
+          <Typography>
+            Are you sure to delete this song: &quot;{song.name}&quot;?
+          </Typography>
+          <Box display="flex" justifyContent="flex-end" marginTop={2}>
+            <Button variant="contained" onClick={deleteSongHandler}>
+              Yes
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => setModalOpen(false)}
+              sx={{ marginLeft: '1rem' }}
+            >
+              No
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+    </>
+  );
+};

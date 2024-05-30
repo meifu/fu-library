@@ -13,12 +13,16 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 import { ArtistInterface } from '../../lib/definitions';
 import ArtistListSkeleton from '../_components/ArtistListSkeleton';
 import BasicContainer from '../_components/BasicContainer';
 import Title from '../_components/Title';
 import { deleteArtist, fetchArtists } from '../../lib/action';
+import { modalInnerStyle } from '../_utils';
 
 export default function Page() {
   const [artists, setArtists] = useState<ArtistInterface[]>([]);
@@ -63,33 +67,14 @@ export default function Page() {
         <List>
           {artists.map((ar) => {
             return (
-              <ListItem key={ar.id} disablePadding>
-                <ListItemText
-                  sx={{ borderLeft: 'solid', marginBottom: '10px' }}
-                >
-                  <ListItemButton href={`/artist/${ar.id}`}>
-                    {ar.name}
-                  </ListItemButton>
-                </ListItemText>
-                <Button
-                  size="small"
-                  onClick={async () => {
-                    if (!ar.id) return;
-                    const data = await deleteArtist(ar.id);
-
-                    setIsSnackBarOpen(true);
-                    if (data.isSuccess) {
-                      setIsDeleteOk(true);
-                      getArtists();
-                    } else {
-                      setIsDeleteOk(false);
-                    }
-                  }}
-                  disabled={!isLogin}
-                >
-                  <DeleteIcon fontSize="small" />
-                </Button>
-              </ListItem>
+              <ArtistItem
+                key={ar.id}
+                ar={ar}
+                setIsSnackBarOpen={setIsSnackBarOpen}
+                setIsDeleteOk={setIsDeleteOk}
+                isLogin={isLogin}
+                refresh={getArtists}
+              />
             );
           })}
         </List>
@@ -122,3 +107,79 @@ export default function Page() {
     </BasicContainer>
   );
 }
+
+interface ArtistItemProps {
+  ar: ArtistInterface;
+  setIsSnackBarOpen: (open: boolean) => any;
+  setIsDeleteOk: (ok: boolean) => any;
+  isLogin: boolean;
+  refresh: () => any;
+}
+
+const ArtistItem = ({
+  ar,
+  setIsSnackBarOpen,
+  setIsDeleteOk,
+  isLogin,
+  refresh,
+}: ArtistItemProps) => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const deleteArtistHandler = async () => {
+    const data = await deleteArtist(ar.id || '');
+
+    setIsSnackBarOpen(true);
+    if (data.isSuccess) {
+      setIsDeleteOk(true);
+      refresh();
+    } else {
+      setIsDeleteOk(false);
+    }
+    setModalOpen(false);
+  };
+
+  return (
+    <>
+      <ListItem disablePadding>
+        <ListItemText sx={{ marginBottom: '10px' }}>
+          <ListItemButton href={`/artist/${ar.id}`}>{ar.name}</ListItemButton>
+        </ListItemText>
+        <Button
+          size="small"
+          onClick={() => {
+            setModalOpen(true);
+          }}
+          disabled={!isLogin}
+        >
+          <DeleteIcon fontSize="small" />
+        </Button>
+      </ListItem>
+      <Modal
+        open={modalOpen}
+        aria-labelledby="confirm-delete-modal"
+        aria-describedby="confirm-delete-modal"
+        onClose={() => {
+          setModalOpen(false);
+        }}
+      >
+        <Box sx={modalInnerStyle}>
+          <Typography>
+            Are you sure to delete this artist: &quot;{ar.name}&quot;?
+          </Typography>
+          <Box display="flex" justifyContent="flex-end" marginTop={2}>
+            <Button variant="contained" onClick={deleteArtistHandler}>
+              Yes
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => setModalOpen(false)}
+              sx={{ marginLeft: '1rem' }}
+            >
+              No
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+    </>
+  );
+};
